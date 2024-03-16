@@ -44,9 +44,10 @@
             <x-input-label for="account_type" :value="__('Select Account Type')" />
 
             <select id="account_type" name="account_type" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option value="individual">Private advertiser</option>
-                <option value="business">Commercial advertiser</option>
-                <option value="business">Platform Owner</option>
+                <option value="'Private advertiser'">Private advertiser</option>
+                <option value="Commercial advertiser">Commercial advertiser</option>
+                <option value="Platform Owner">Platform Owner</option>
+                <option value="Platform Owner">Viewer</option>
             </select>
         </div>
 
