@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -48,6 +49,17 @@ return new class extends Migration
                 $table->unique(['name', 'guard_name']);
             }
         });
+
+        $roles = [
+            'private' => 'Private advertiser',
+            'commercial' => 'Commercial advertiser',
+            'viewer' => 'Viewer',
+        ];
+
+
+        foreach ($roles as $roleName) {
+            Role::create(['name' => $roleName]);
+        }
 
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $teams) {
             $table->unsignedBigInteger($pivotPermission);
