@@ -24,7 +24,7 @@
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                             Export Registration to PDF
                         </h2>
-                        <a href="export" class="inline-block text-gray-600 dark:text-gray-400 hover:text-white hover:border-b-2 hover:border-white hover:border-solid transition duration-300">
+                        <a href="{{route('export')}}" class="inline-block text-gray-600 dark:text-gray-400 hover:text-white hover:border-b-2 hover:border-white hover:border-solid transition duration-300">
                             <p class="mt-1 text-sm">
                                 Export here your business registration to PDF
                             </p>
