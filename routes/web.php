@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\DocumentExportController;
+use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
