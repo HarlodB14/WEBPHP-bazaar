@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use mysql_xdevapi\Table;
 
 class RentalAdvertisement extends Model
 {
@@ -17,6 +18,7 @@ class RentalAdvertisement extends Model
         'image_URL',
         'price',
     ];
+    protected $table = 'rental_advertisement';
 
     public function category()
     {
