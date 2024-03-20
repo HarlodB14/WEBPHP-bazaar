@@ -7,11 +7,13 @@
 
     <div class="py-12">
         @if(session()->has('message'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">{{ session()->get__('message') }}</span>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-xs mx-auto" role="alert">
+                <span class="block sm:inline">{{ session()->get('message') }}</span>
                 <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
                 <svg class="fill-current h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M9.293 10l-1.147 1.146a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-1.5 1.5a1 1 0 0 1-1.414 0L9.293 11.414 7.793 12.914a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l1.5 1.5a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0l-6-6a1 1 0 1 1 1.414-1.414l5.5 5.5a1 1 0 0 1 0 1.414l-2 2a1 1 0 1 1-1.414-1.414l1.146-1.147z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd"
+                          d="M9.293 10l-1.147 1.146a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-1.5 1.5a1 1 0 0 1-1.414 0L9.293 11.414 7.793 12.914a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l1.5 1.5a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0l-6-6a1 1 0 1 1 1.414-1.414l5.5 5.5a1 1 0 0 1 0 1.414l-2 2a1 1 0 1 1-1.414-1.414l1.146-1.147z"
+                          clip-rule="evenodd"/>
                 </svg>
             </span>
             </div>
@@ -23,7 +25,7 @@
                        class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mb-4">
                         {{ __('Create new advertisement') }}
                     </a>
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="table-auto min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
                             <th scope="col"
@@ -48,27 +50,34 @@
                                     {{ __('Owner') }}
                                 </th>
                             @endif
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ __('Published at') }}
+                            </th>
                             <th scope="col" class="relative px-6 py-3">
-                                <span class="sr-only">Edit</span>
                             </th>
                         </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-gray-800 divide-y divide-gray-200">
                         @foreach($advertisements as $advertisement)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <!-- Make the title clickable and link to the advertisement details route -->
-                                    <a href="{{ route('advertisement.show', $advertisement->id) }}"
-                                       class="text-blue-500 hover:underline">{{ $advertisement->title }}</a>
+                                    {{ $advertisement->title }} <!-- Remove the anchor tag -->
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->category }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->category->type }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->price }}</td>
                                 @if($user->hasRole('Viewer'))
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->owner }}</td>
                                 @endif
+                                <td class="px-6 py-4 whitespace-nowrap">{{$advertisement->created_at}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <!-- Add an edit button or other actions if needed -->
+{{--                                    <a href="{{ route('create') }}" class="inline-flex items-center rounded-md bg-blue-300 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2">--}}
+{{--                                        {{ __('Edit') }}--}}
+{{--                                    </a>--}}
+{{--                                    <a href="{{ route('create') }}" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2">--}}
+{{--                                        {{ __('Delete') }}--}}
+{{--                                    </a>--}}
                                 </td>
                             </tr>
                         @endforeach

@@ -48,6 +48,6 @@ class User extends Authenticatable
     }
     public function rentalAdvertisement()
     {
-        return $this->hasMany(RentalAdvertisement::class);
+        return $this->hasMany(Advertisement::class);
     }
 }

@@ -6,19 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use mysql_xdevapi\Table;
 
-class RentalAdvertisement extends Model
+class Advertisement extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'title',
-        'category',
+        'category_id',
         'owner_name',
         'body',
         'image_URL',
         'price',
+        'user_id'
     ];
-    protected $table = 'rental_advertisement';
+    protected $table = 'advertisements';
 
     public function category()
     {

@@ -13,6 +13,6 @@ class Category extends Model
 
     public function advertisements()
     {
-        return $this->hasMany(RentalAdvertisement::class);
+        return $this->hasMany(Advertisement::class);
     }
 }

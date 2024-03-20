@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
-use App\Http\rental\RentalController;
+use App\Http\rental\AdvertController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,10 +12,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/advertisements', [RentalController::class, 'index'])->name('advertisements');
-Route::post('/publish', [RentalController::class, 'store'])->name('publish');
-Route::get('/create-new-advertisement.blade.php', [RentalController::class, 'create'])->name('create');
-Route::get('/create-new-advertisement', [RentalController::class, 'create'])->name('create-new-advertisement');
+Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements');
+//Route::get('/advertisements', [AdvertController::class, 'edit'])->name('advertisements');
+Route::post('/publish', [AdvertController::class, 'store'])->name('store');
+Route::get('/advertisements/create-new-advertisement', [AdvertController::class, 'create'])->name('create');
+Route::get('/create-new-advertisement', [AdvertController::class, 'create'])->name('create-new-advertisement');
 
 Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');
 
