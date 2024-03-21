@@ -36,9 +36,10 @@ class AdvertController extends Controller
     }
     public function show(Advertisement $advertisement)
     {
+        $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($advertisement->getURLAttribute());
 
-        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode'));
+        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode','user'));
     }
 
 
