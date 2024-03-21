@@ -60,6 +60,10 @@
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ __('Action') }}
                             </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ __('QR-code') }}
+                            </th>
                         </tr>
                         </thead>
                         <tbody class="bg-gray-800 divide-y divide-gray-200">
@@ -77,17 +81,28 @@
                                 <td class="px-6 py-4 whitespace-nowrap">{{$advertisement->created_at}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if($user->hasRole('Commercial advertiser') || $user->hasRole('Private advertiser'))
-                                        <a href="{{ route('advertisements.edit', ['advertisement' => $advertisement->id]) }}" class="inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                        <a href="{{ route('advertisements.edit', ['advertisement' => $advertisement->id]) }}"
+                                           class="inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                                             {{ __('Edit') }}
                                         </a>
-                                        <form action="{{ route('advertisements.delete', ['advertisement' => $advertisement->id]) }}" method="POST" class="inline">
+                                        <form
+                                            action="{{ route('advertisements.delete', ['advertisement' => $advertisement->id]) }}"
+                                            method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                            <button type="submit"
+                                                    class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                                                 {{ __('Delete') }}
                                             </button>
                                         </form>
                                     @endif
+                                    <a href="{{ route('advertisements.show', ['advertisement' => $advertisement->id]) }}"
+                                       class="inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                        {{ __('Details') }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <img src="data:image/png;base64,{{ ($qrCodes[$advertisement->id]) }}" alt="">
                                 </td>
                             </tr>
                         @endforeach

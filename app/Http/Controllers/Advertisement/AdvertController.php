@@ -1,27 +1,43 @@
 <?php
 
-namespace App\Http\rental;
+namespace App\Http\Controllers\Advertisement;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Advertisement;
-use Carbon\Carbon;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AdvertController extends Controller
 {
 
-    public function index(): View
+    public function index()
     {
+        $user_id = auth()->id(); // Get the authenticated user's ID
+        $user = User::find($user_id); // Fetch the authenticated user object
+
         $advertisements = Advertisement::all();
-        $user = auth()->user();
-        return view('Advertisement.advertisement-overview', compact('advertisements', 'user'));
+
+        $qrCodes = [];
+        foreach ($advertisements as $advertisement) {
+            $url = $advertisement->getURLAttribute(); // Assuming this method generates the URL
+            $qrCodes[$advertisement->id] = QrCode::size(150)->generate($url);
+        }
+
+
+        return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
     }
+
+    public function show(Advertisement $advertisement)
+    {
+        return view('advertisement.advertisement-detail', compact('advertisement'));
+    }
+
+
 
 
     public function create(): View
@@ -44,7 +60,7 @@ class AdvertController extends Controller
         $data['user_id'] = $user_id;
         $data['category_id'] = $request->input('category');
 
-        Advertisement::create($data);
+        Advertisement::create(array_merge($data, ['advertisement_url' => $request->url()]));
         return redirect()->route('advertisements.index')->with('message', "New advertisement created and successfully published!");
     }
 

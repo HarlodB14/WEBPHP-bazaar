@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Advertisement\AdvertController;
 use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
-use App\Http\rental\AdvertController;
+use App\Http\Controllers\QRcodeGenerateController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,6 +14,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements.index');
+Route::get('/advertisements/{advertisement}', [AdvertController::class, 'show'])->name('advertisements.show');
 Route::get('/advertisements/create-new-advertisement', [AdvertController::class, 'create'])->name('advertisements.create');
 Route::post('/advertisements/store', [AdvertController::class, 'store'])->name('advertisements.store');
 Route::get('/advertisements/{advertisement}/edit', [AdvertController::class, 'edit'])->name('advertisements.edit');
@@ -22,6 +24,7 @@ Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'dele
 
 
 Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');
+Route::get('/advertisements/{advertisement}/qr-code', [QRcodeGenerateController::class, 'generateQRCode'])->name('advertisements.qr-code');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
