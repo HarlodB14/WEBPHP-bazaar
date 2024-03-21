@@ -12,11 +12,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements');
-//Route::get('/advertisements', [AdvertController::class, 'edit'])->name('advertisements');
-Route::post('/publish', [AdvertController::class, 'store'])->name('store');
-Route::get('/advertisements/create-new-advertisement', [AdvertController::class, 'create'])->name('create');
-Route::get('/create-new-advertisement', [AdvertController::class, 'create'])->name('create-new-advertisement');
+Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements.index');
+Route::get('/advertisements/create-new-advertisement', [AdvertController::class, 'create'])->name('advertisements.create');
+Route::post('/advertisements/store', [AdvertController::class, 'store'])->name('advertisements.store');
+Route::get('/advertisements/{advertisement}/edit', [AdvertController::class, 'edit'])->name('advertisements.edit');
+Route::put('/advertisements/{advertisement}', [AdvertController::class, 'update'])->name('advertisements.update');
+Route::get('/advertisements/{advertisement}/edit', [AdvertController::class, 'edit'])->name('advertisements.edit');
+Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'delete'])->name('advertisements.delete');
+
 
 Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');
 

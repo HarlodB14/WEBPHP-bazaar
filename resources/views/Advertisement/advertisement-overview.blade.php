@@ -7,7 +7,9 @@
 
     <div class="py-12">
         @if(session()->has('message'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-xs mx-auto" role="alert">
+            <div
+                class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-xl mx-auto mb-4"
+                role="alert">
                 <span class="block sm:inline">{{ session()->get('message') }}</span>
                 <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
                 <svg class="fill-current h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -21,7 +23,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <a href="{{ route('create') }}"
+                    <a href="{{ route('advertisements.create') }}"
                        class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mb-4">
                         {{ __('Create new advertisement') }}
                     </a>
@@ -54,7 +56,9 @@
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ __('Published at') }}
                             </th>
-                            <th scope="col" class="relative px-6 py-3">
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ __('Action') }}
                             </th>
                         </tr>
                         </thead>
@@ -63,21 +67,27 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ $advertisement->title }} <!-- Remove the anchor tag -->
+                                    {{ $advertisement->title }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->category->type }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->price }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">€{{ $advertisement->price }}</td>
                                 @if($user->hasRole('Viewer'))
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->owner }}</td>
                                 @endif
                                 <td class="px-6 py-4 whitespace-nowrap">{{$advertisement->created_at}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-{{--                                    <a href="{{ route('create') }}" class="inline-flex items-center rounded-md bg-blue-300 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2">--}}
-{{--                                        {{ __('Edit') }}--}}
-{{--                                    </a>--}}
-{{--                                    <a href="{{ route('create') }}" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2">--}}
-{{--                                        {{ __('Delete') }}--}}
-{{--                                    </a>--}}
+                                    @if($user->hasRole('Commercial advertiser') || $user->hasRole('Private advertiser'))
+                                        <a href="{{ route('advertisements.edit', ['advertisement' => $advertisement->id]) }}" class="inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                            {{ __('Edit') }}
+                                        </a>
+                                        <form action="{{ route('advertisements.delete', ['advertisement' => $advertisement->id]) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                {{ __('Delete') }}
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
