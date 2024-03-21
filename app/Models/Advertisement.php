@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 use mysql_xdevapi\Table;
 
 class Advertisement extends Model
@@ -20,6 +21,16 @@ class Advertisement extends Model
         'user_id'
     ];
     protected $table = 'advertisements';
+
+    public function getURLAttribute()
+    {
+        return URL::route('advertisements.show', $this->id);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function category()
     {

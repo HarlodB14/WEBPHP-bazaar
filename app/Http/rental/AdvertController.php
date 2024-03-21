@@ -5,6 +5,7 @@ namespace App\Http\rental;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Advertisement;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -12,16 +13,37 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AdvertController extends Controller
 {
 
-    public function index(): View
+    public function index()
     {
+        $user_id = auth()->id(); // Get the authenticated user's ID
+        $user = User::find($user_id); // Fetch the authenticated user object
+
         $advertisements = Advertisement::all();
-        $user = auth()->user();
-        return view('Advertisement.advertisement-overview', compact('advertisements', 'user'));
+
+        $qrCodes = [];
+        foreach ($advertisements as $advertisement) {
+            $url = $advertisement->getURLAttribute(); // Assuming this method generates the URL
+            $qrCodes[$advertisement->id] = QrCode::size(150)->generate($url);
+        }
+
+
+        return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
     }
+    public function show(Advertisement $advertisement)
+    {
+        $user = auth()->user();
+        $qrcode = QrCode::size(150)->generate($advertisement->getURLAttribute());
+
+        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode','user'));
+    }
+
+
+
 
 
     public function create(): View
