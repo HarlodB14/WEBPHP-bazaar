@@ -60,6 +60,10 @@
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ __('Action') }}
                             </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ __('QR-code') }}
+                            </th>
                         </tr>
                         </thead>
                         <tbody class="bg-gray-800 divide-y divide-gray-200">
@@ -88,6 +92,13 @@
                                             </button>
                                         </form>
                                     @endif
+                                        <a href="{{ route('advertisements.show', ['advertisement' => $advertisement->id]) }}"
+                                           class="inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                            {{ __('Details') }}
+                                        </a>
+                                </td>
+                                <td>
+                                    {{ ($qrCodes[$advertisement->id]) }}
                                 </td>
                             </tr>
                         @endforeach
