@@ -46,11 +46,17 @@ class AdvertController extends Controller
 
 
 
-    public function create(): View
+    public function create()
     {
+        $user = auth()->user();
+        if ($user->advertisement()->count() >= 4) {
+            return redirect()->back()->with('error', "You can only create a maximum of 4 advertisements.");
+        }
+
         $categories = Category::all();
         return view('Advertisement.create-new-advertisement', compact('categories'));
     }
+
 
     public function store(Request $request): RedirectResponse
     {

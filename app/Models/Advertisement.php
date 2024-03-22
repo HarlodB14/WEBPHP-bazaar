@@ -36,4 +36,8 @@ class Advertisement extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function linkedAdvertisements()
+    {
+        return $this->belongsToMany(Advertisement::class, 'advertisement_links', 'advertisement_id', 'linked_advertisement_id');
+    }
 }
