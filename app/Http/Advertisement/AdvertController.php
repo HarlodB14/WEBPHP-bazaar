@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\rental;
+namespace App\Http\Advertisement;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;

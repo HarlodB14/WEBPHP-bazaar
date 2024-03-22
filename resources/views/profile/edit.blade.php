@@ -18,8 +18,8 @@
                     @include('profile.partials.update-password-form')
                 </div>
             </div>
-            @if($user->hasRole('Commercial advertiser'))
-                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            @role(['Private advertiser','Commercial advertiser'])
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <div class="max-w-xl">
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                             {{ __('Export Registration to PDF') }}
@@ -31,7 +31,7 @@
                         </a>
                     </div>
                 </div>
-            @endif
+            @endrole
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')

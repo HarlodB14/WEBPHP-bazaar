@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\QRcode;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class QRcodeGenerateController extends Controller

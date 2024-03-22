@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
-use App\Http\rental\AdvertController;
+use App\Http\Advertisement\AdvertController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
