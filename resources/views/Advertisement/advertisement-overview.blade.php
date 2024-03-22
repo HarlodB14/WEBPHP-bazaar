@@ -23,10 +23,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @role(['Private advertiser','Commercial advertiser'])
                     <a href="{{ route('advertisements.create') }}"
                        class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mb-4">
                         {{ __('Create new advertisement') }}
                     </a>
+                    @endrole
                     <table class="table-auto min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
@@ -62,7 +64,7 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {{ __('QR-code') }}
+                                {{ __('QRcode') }}
                             </th>
                         </tr>
                         </thead>
@@ -75,13 +77,13 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->category->type }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">€{{ $advertisement->price }}</td>
-                                @if($user->hasRole('Viewer'))
+                                @role('Viewer')
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->owner->name }}</td>
-                                @endif
+                                @endrole
                                 <td class="px-6 py-4 whitespace-nowrap">{{$advertisement->created_at}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($user->hasRole('Commercial advertiser') || $user->hasRole('Private advertiser'))
-                                        <a href="{{ route('advertisements.edit', ['advertisement' => $advertisement->id]) }}"
+                                    @role(['Private advertiser','Commercial advertiser'])
+                                    <a href="{{ route('advertisements.edit', ['advertisement' => $advertisement->id]) }}"
                                            class="inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                                             {{ __('Edit') }}
                                         </a>
@@ -95,7 +97,7 @@
                                                 {{ __('Delete') }}
                                             </button>
                                         </form>
-                                    @endif
+                                    @endrole
                                     <a href="{{ route('advertisements.show', ['advertisement' => $advertisement->id]) }}"
                                        class="inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                                         {{ __('Details') }}
