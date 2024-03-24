@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Advertisement;
+namespace App\Http\Controllers\Advertisement;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Advertisement;
+use App\Models\Category;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 

@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\Advertisement\AdvertController;
 use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Advertisement\AdvertController;
-use App\Http\Controllers\RentalController;
+use App\Http\Controllers\Rental\RentalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +22,8 @@ Route::put('/advertisements/{advertisement}', [AdvertController::class, 'update'
 Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'delete'])->name('advertisements.delete');
 
 Route::get('/rentals', [RentalController::class, 'index'])->name('rentals.index');
+Route::get('/rentals/create', [RentalController::class, 'create'])->name('rentals.create');
+Route::post('/rentals/store', [RentalController::class, 'store'])->name('rentals.store');
 
 
 Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');

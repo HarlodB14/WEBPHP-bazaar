@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\QRcode;
+namespace App\Http\Controllers\QRcode;
 
 use App\Http\Controllers\Controller;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'listWeek,listDay'
         },
-        height: 'auto', 
+        height: 'auto',
         buttonText: {
             listWeek: 'Week View',
             listDay: 'Day View'
