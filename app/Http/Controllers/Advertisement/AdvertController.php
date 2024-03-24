@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Advertisement;
 use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
 use App\Models\Category;
+use App\Models\Rental;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,14 +18,14 @@ class AdvertController extends Controller
 
     public function index()
     {
-        $user_id = auth()->id(); // Get the authenticated user's ID
-        $user = User::find($user_id); // Fetch the authenticated user object
+        $user_id = auth()->id();
+        $user = User::find($user_id);
 
         $advertisements = Advertisement::all();
 
         $qrCodes = [];
         foreach ($advertisements as $advertisement) {
-            $url = $advertisement->getURLAttribute(); // Assuming this method generates the URL
+            $url = $advertisement->getURLAttribute();
             $qrCodes[$advertisement->id] = QrCode::size(150)->generate($url);
         }
 

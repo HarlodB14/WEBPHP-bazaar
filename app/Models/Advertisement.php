@@ -38,6 +38,6 @@ class Advertisement extends Model
     }
     public function linkedAdvertisements()
     {
-        return $this->belongsToMany(Advertisement::class, 'advertisement_links', 'advertisement_id', 'linked_advertisement_id');
+        return $this->belongsToMany(Rental::class, 'advertisement_links', 'advertisement_id', 'linked_advertisement_id');
     }
 }
