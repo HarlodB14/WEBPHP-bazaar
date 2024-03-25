@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ['type' => 'Animal'],
             ['type' => 'Electronics'],
             ['type' => 'Home accessories'],
+            ['type' => 'Other']
         ]);
 
 

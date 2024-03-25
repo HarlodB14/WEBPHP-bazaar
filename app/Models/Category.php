@@ -15,4 +15,8 @@ class Category extends Model
     {
         return $this->hasMany(Advertisement::class);
     }
+    public function rentals()
+    {
+        return $this->hasMany(Rental::class);
+    }
 }

@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Http\Advertisement;
+namespace App\Http\Controllers\Advertisement;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Advertisement;
+use App\Models\Category;
+use App\Models\Rental;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -20,14 +18,14 @@ class AdvertController extends Controller
 
     public function index()
     {
-        $user_id = auth()->id(); // Get the authenticated user's ID
-        $user = User::find($user_id); // Fetch the authenticated user object
+        $user_id = auth()->id();
+        $user = User::find($user_id);
 
         $advertisements = Advertisement::all();
 
         $qrCodes = [];
         foreach ($advertisements as $advertisement) {
-            $url = $advertisement->getURLAttribute(); // Assuming this method generates the URL
+            $url = $advertisement->getURLAttribute();
             $qrCodes[$advertisement->id] = QrCode::size(150)->generate($url);
         }
 
@@ -46,11 +44,17 @@ class AdvertController extends Controller
 
 
 
-    public function create(): View
+    public function create()
     {
+        $user = auth()->user();
+        if ($user->advertisement()->count() >= 4) {
+            return redirect()->back()->with('error', "You can only create a maximum of 4 advertisements.");
+        }
+
         $categories = Category::all();
         return view('Advertisement.create-new-advertisement', compact('categories'));
     }
+
 
     public function store(Request $request): RedirectResponse
     {

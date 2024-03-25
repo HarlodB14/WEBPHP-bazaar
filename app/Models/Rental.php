@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
-use mysql_xdevapi\Table;
 
-class Advertisement extends Model
+class Rental extends Model
 {
     use HasFactory;
 
@@ -18,26 +17,28 @@ class Advertisement extends Model
         'body',
         'image_URL',
         'price',
-        'user_id'
+        'user_id',
+        'handover_date',
+        'return_date',
     ];
-    protected $table = 'advertisements';
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 
     public function getURLAttribute()
     {
-        return URL::route('advertisements.show', $this->id);
+        return URL::route('rentals.show', $this->id);
     }
 
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function advertisements()
+    {
+        return $this->belongsToMany(Advertisement::class, 'advertisement_links', 'linked_advertisement_id', 'advertisement_id');
+    }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-    public function linkedAdvertisements()
-    {
-        return $this->belongsToMany(Rental::class, 'advertisement_links', 'advertisement_id', 'linked_advertisement_id');
-    }
+
 }
