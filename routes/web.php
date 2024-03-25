@@ -23,6 +23,9 @@ Route::put('/advertisements/{advertisement}', [AdvertController::class, 'update'
 Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'delete'])->name('advertisements.delete');
 Route::get('/advertisement/add-to-basket/{advertisement}', [ShopController::class, 'addItem'])->name('advertisements.add');
 
+Route::get('/shoppingbasket', [ShopController::class, 'index'])->name('basket.show');
+Route::delete('/shoppingbasket/{basket}', [ShopController::class, 'delete'])->name('basket.delete');
+
 Route::get('/rentals', [RentalController::class, 'index'])->name('rentals.index');
 Route::get('/rentals/agenda', [RentalController::class, 'agenda'])->name('rentals.agenda');
 Route::get('/rentals/create', [RentalController::class, 'create'])->name('rentals.create');
