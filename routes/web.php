@@ -4,6 +4,7 @@ use App\Http\Controllers\Advertisement\AdvertController;
 use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Rental\RentalController;
+use App\Http\Controllers\Shop\ShopController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,10 @@ Route::get('/advertisements/{advertisement}', [AdvertController::class, 'show'])
 Route::get('/advertisements/{advertisement}/edit', [AdvertController::class, 'edit'])->name('advertisements.edit');
 Route::put('/advertisements/{advertisement}', [AdvertController::class, 'update'])->name('advertisements.update');
 Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'delete'])->name('advertisements.delete');
+Route::get('/advertisement/add-to-basket/{advertisement}', [ShopController::class, 'addItem'])->name('advertisements.add');
+
+Route::get('/shoppingbasket', [ShopController::class, 'index'])->name('basket.show');
+Route::delete('/shoppingbasket/{basket}', [ShopController::class, 'delete'])->name('basket.delete');
 
 Route::get('/rentals', [RentalController::class, 'index'])->name('rentals.index');
 Route::get('/rentals/agenda', [RentalController::class, 'agenda'])->name('rentals.agenda');

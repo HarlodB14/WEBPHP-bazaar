@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rental::class);
     }
+
+    public function basket()
+    {
+        return $this->hasOne(Basket::class);
+    }
 }
