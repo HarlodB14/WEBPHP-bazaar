@@ -20,7 +20,7 @@ class RentalController extends Controller
         $user_id = auth()->id(); // Get the authenticated user's ID
         $user = User::find($user_id); // Fetch the authenticated user object
 
-        $rentals = Rental::all();
+        $rentals = Rental::with('category')->get();
 
         $qrCodes = [];
         foreach ($rentals as $rental) {
@@ -70,7 +70,7 @@ class RentalController extends Controller
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($rental->getURLAttribute());
 
-        return view('Rental.rental-detail', compact('rental', 'qrcode','user'));
+        return view('Rental.rental-detail', compact('rental', 'qrcode', 'user'));
     }
 
     public function update(Request $request, $id): RedirectResponse
@@ -89,6 +89,26 @@ class RentalController extends Controller
         $rental->update($data);
 
         return redirect()->route('rentals.index')->with('message', "Rental updated!");
+    }
+
+    public function saveDate(Request $request, $id)
+    {
+        $request->validate([
+            'start' => 'required|date',
+            'end' => 'required|date|after_or_equal:start',
+        ]);
+
+        $rental = Rental::findOrFail($id);
+
+        $startDate = $request->input('start');
+        $endDate = $request->input('end');
+
+        $rental->start_date = $startDate;
+        $rental->return_date = $endDate;
+
+        $rental->update();
+
+        return redirect()->route('rentals.index')->with('message', "Rental Period successfully set & saved");
     }
 
 
