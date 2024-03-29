@@ -31,27 +31,31 @@
                 </div>
                 <div class="mt-10">
                     @role('Viewer')
-                    <form action="{{ route('rentals.date.save', ['rental' => $rental->id]) }}" method="POST"
-                          class="inline">
-                        @csrf
-                        <h2 class="text-xl font-bold mb-2">{{ __('Select the date-period for this rental-item') }}</h2>
-                        <div class="flex items-center">
-                            <label for="start">Start Date:</label>
-                            <input type="date" id="start" name="start" lang="en"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fit p-2.5 ml-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="Select date start">
-                        </div>
-                        <div class="flex items-center mt-4">
-                            <label for="end">End Date:</label>
-                            <input type="date" id="end" name="end" lang="en"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fit p-2.5 ml-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="Select date end">
-                        </div>
-                        <button type="submit"
-                                class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
-                            {{__('Save rental period')}}
-                        </button>
-                    </form>
+                    @if($rental->return_date)
+                        <p class="text-gray-300">{{__('Return date set to: ')}}{{ $rental->return_date }}</p>
+                    @else
+                        <form action="{{ route('rentals.date.save', ['rental' => $rental->id]) }}" method="POST"
+                              class="inline">
+                            @csrf
+                            <h2 class="text-xl font-bold mb-2">{{ __('Select the date-period for this rental-item') }}</h2>
+                            <div class="flex items-center">
+                                <label for="start">Start Date:</label>
+                                <input type="date" id="start" name="start" lang="en"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fit p-2.5 ml-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="Select date start">
+                            </div>
+                            <div class="flex items-center mt-4">
+                                <label for="end">End Date:</label>
+                                <input type="date" id="end" name="end" lang="en"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fit p-2.5 ml-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="Select date end">
+                            </div>
+                            <button type="submit"
+                                    class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
+                                {{__('Save rental period')}}
+                            </button>
+                        </form>
+                    @endif
                     @endrole
                     @role(['Private advertiser','Commercial advertiser'])
                     <div class="mt-4">
