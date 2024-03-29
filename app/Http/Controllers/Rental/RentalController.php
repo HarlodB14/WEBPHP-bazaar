@@ -7,6 +7,7 @@ use App\Models\Advertisement;
 use App\Models\Rental;
 use App\Models\Category;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,17 +18,36 @@ class RentalController extends Controller
 {
     public function index()
     {
-        $user_id = auth()->id(); // Get the authenticated user's ID
-        $user = User::find($user_id); // Fetch the authenticated user object
+        $user = auth()->user();
+        $rentalsQuery = Rental::with('category');
 
-        $rentals = Rental::all();
+        if ($user->hasRole(['Viewer'])) {
+            $rentals = $rentalsQuery->get();
+        } else {
+            $rentals = $user->rental()->with('category')->get();
+        }
 
         $qrCodes = [];
         foreach ($rentals as $rental) {
-            $url = $rental->getURLAttribute(); // Assuming this method generates the URL
+            $url = $rental->getURLAttribute();
             $qrCodes[$rental->id] = QrCode::size(150)->generate($url);
         }
         return view('Rental.rental-overview', compact('rentals', 'qrCodes', 'user'));
+    }
+
+
+    public function fetchRentalData()
+    {
+        $user = auth()->user();
+        $rentalsQuery = Rental::with('category');
+
+        if ($user->hasRole(['Viewer'])) {
+            $rentals = $rentalsQuery->get();
+        } else {
+            $rentals = $user->rental()->with('category')->get();
+        }
+
+        return response()->json($rentals);
     }
 
     public function agenda()
@@ -70,7 +90,7 @@ class RentalController extends Controller
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($rental->getURLAttribute());
 
-        return view('Rental.rental-detail', compact('rental', 'qrcode','user'));
+        return view('Rental.rental-detail', compact('rental', 'qrcode', 'user'));
     }
 
     public function update(Request $request, $id): RedirectResponse
@@ -91,6 +111,26 @@ class RentalController extends Controller
         return redirect()->route('rentals.index')->with('message', "Rental updated!");
     }
 
+    public function saveDate(Request $request, $id)
+    {
+        $request->validate([
+            'start' => 'required|date',
+            'end' => 'required|date|after_or_equal:start',
+        ]);
+
+        $rental = Rental::findOrFail($id);
+
+        $startDate = $request->input('start');
+        $endDate = $request->input('end');
+
+        $rental->start_date = $startDate;
+        $rental->return_date = $endDate;
+
+        $rental->update();
+
+        return redirect()->route('rentals.index')->with('message', "Rental Period successfully set & saved for: " . $rental->title);
+    }
+
 
     public function edit($id): View
     {
@@ -105,7 +145,6 @@ class RentalController extends Controller
         $rental = Rental::findOrFail($id);
         $rental->delete();
 
-        // Clear ID seeding
         DB::statement('ALTER TABLE advertisements AUTO_INCREMENT = 1');
 
         return redirect()->route('rentals.index')->with('message', "Rental deleted!");

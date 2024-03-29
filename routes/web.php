@@ -27,13 +27,16 @@ Route::get('/shoppingbasket', [ShopController::class, 'index'])->name('basket.sh
 Route::delete('/shoppingbasket/{basket}', [ShopController::class, 'delete'])->name('basket.delete');
 
 Route::get('/rentals', [RentalController::class, 'index'])->name('rentals.index');
+Route::get('/rentals/fetch', [RentalController::class, 'fetchRentalData'])->name('rentals.fetch');
 Route::get('/rentals/agenda', [RentalController::class, 'agenda'])->name('rentals.agenda');
 Route::get('/rentals/create', [RentalController::class, 'create'])->name('rentals.create');
 Route::post('/rentals/store', [RentalController::class, 'store'])->name('rentals.store');
-Route::get('//rentals/{rental}/edit',[RentalController::class, 'edit'])->name('rentals.edit');
+Route::post('/rentals/{rental}', [RentalController::class, 'saveDate'])->name('rentals.date.save');
+Route::get('/rentals/{rental}/edit', [RentalController::class, 'edit'])->name('rentals.edit');
 Route::get('/rentals/{rental}', [RentalController::class, 'show'])->name('rentals.show');
 Route::put('/rentals/{rental}', [RentalController::class, 'update'])->name('rentals.update');
 Route::delete('/rentals/{rental}', [RentalController::class, 'delete'])->name('rentals.delete');
+
 
 
 Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');

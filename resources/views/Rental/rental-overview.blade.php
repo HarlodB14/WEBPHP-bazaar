@@ -45,6 +45,12 @@
                         {{ __('Show agenda') }}
                     </a>
                     @endrole
+                    @role('Viewer')
+                    <a href="{{ route('rentals.agenda') }}"
+                       class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mb-2 mt-2">
+                        {{ __('Show my current agenda') }}
+                    </a>
+                    @endrole
                     <table class="table-auto min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>

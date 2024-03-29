@@ -13,7 +13,7 @@
                         {{ __('Show list of rentals') }}
                     </a>
                     <div id="calendar"></div>
-
+                    <div id="error" class="text-red-500"></div>
                 </div>
             </div>
         </div>

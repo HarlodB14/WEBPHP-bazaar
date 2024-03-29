@@ -21,7 +21,7 @@ class AdvertController extends Controller
         $user_id = auth()->id();
         $user = User::find($user_id);
 
-        $advertisements = Advertisement::all();
+        $advertisements = Advertisement::with('category')->get();
 
         $qrCodes = [];
         foreach ($advertisements as $advertisement) {
@@ -37,11 +37,8 @@ class AdvertController extends Controller
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($advertisement->getURLAttribute());
 
-        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode','user'));
+        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user'));
     }
-
-
-
 
 
     public function create()
@@ -101,9 +98,6 @@ class AdvertController extends Controller
     }
 
 
-
-
-
     public function delete($id): RedirectResponse
     {
         $advertisement = Advertisement::findOrFail($id);
@@ -114,7 +108,6 @@ class AdvertController extends Controller
 
         return redirect()->route('advertisements.index')->with('message', "Advertisement deleted!");
     }
-
 
 
 }

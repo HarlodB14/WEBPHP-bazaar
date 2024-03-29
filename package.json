@@ -21,6 +21,7 @@
         "@fullcalendar/list": "^6.1.11",
         "@fullcalendar/react": "^6.1.11",
         "@fullcalendar/timegrid": "^6.1.11",
+        "flowbite-datepicker": "^1.2.6",
         "puppeteer": "^22.5.0"
     }
 }
