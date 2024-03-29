@@ -32,6 +32,25 @@ class AdvertController extends Controller
 
         return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
     }
+
+    public function agenda()
+    {
+        return view('Advertisement.advertisement-agenda');
+    }
+
+    public function fetchAdvertisementData()
+    {
+        $user = auth()->user();
+        $advertisementQuery = Advertisement::with('category');
+
+        if ($user->hasRole(['Viewer'])) {
+            $advertisements = $advertisementQuery->get();
+        } else {
+            $advertisements = $user->advertisement()->with('category')->get();
+        }
+
+        return response()->json($advertisements);
+    }
     public function show(Advertisement $advertisement)
     {
         $user = auth()->user();
