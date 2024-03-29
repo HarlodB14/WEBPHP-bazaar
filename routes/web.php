@@ -17,6 +17,8 @@ Route::get('/dashboard', function () {
 Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements.index');
 Route::get('/advertisements/create', [AdvertController::class, 'create'])->name('advertisements.create');
 Route::post('/advertisements/store', [AdvertController::class, 'store'])->name('advertisements.store');
+Route::get('/advertisements/agenda', [AdvertController::class, 'agenda'])->name('advertisements.agenda');
+Route::get('/advertisements/fetch', [AdvertController::class, 'fetchAdvertisementData'])->name('advertisements.fetch');
 Route::get('/advertisements/{advertisement}', [AdvertController::class, 'show'])->name('advertisements.show');
 Route::get('/advertisements/{advertisement}/edit', [AdvertController::class, 'edit'])->name('advertisements.edit');
 Route::put('/advertisements/{advertisement}', [AdvertController::class, 'update'])->name('advertisements.update');
@@ -36,7 +38,6 @@ Route::get('/rentals/{rental}/edit', [RentalController::class, 'edit'])->name('r
 Route::get('/rentals/{rental}', [RentalController::class, 'show'])->name('rentals.show');
 Route::put('/rentals/{rental}', [RentalController::class, 'update'])->name('rentals.update');
 Route::delete('/rentals/{rental}', [RentalController::class, 'delete'])->name('rentals.delete');
-
 
 
 Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');

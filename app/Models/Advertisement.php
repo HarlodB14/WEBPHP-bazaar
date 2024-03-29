@@ -18,9 +18,17 @@ class Advertisement extends Model
         'body',
         'image_URL',
         'price',
-        'user_id'
+        'user_id',
+        'expiration_date'
     ];
     protected $table = 'advertisements';
+
+    protected static function booted()
+    {
+        static::creating(function ($advertisement) {
+            $advertisement->expiration_date = now()->addDays(4);
+        });
+    }
 
     public function getURLAttribute()
     {
