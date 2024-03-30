@@ -54,10 +54,6 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {{ __('Status') }}
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ __('Action') }}
                             </th>
                         </tr>
@@ -71,7 +67,6 @@
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $bidDetail['advertisement_owner'] }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">€{{ $bidDetail['advertisement_price'] }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">€{{ $bidDetail['bid_amount'] }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $bidDetail['bid_status'] }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <form action="{{ route('bid.delete', ['bid' => $bidDetail['bid_id']]) }}"
                                           method="POST" class="inline">

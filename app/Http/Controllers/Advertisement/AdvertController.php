@@ -58,7 +58,8 @@ class AdvertController extends Controller
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($advertisement->getURLAttribute());
 
-        $currentBids = Bid::where('advertisement_id', $advertisement->id)->with('users')->get();
+        $currentBids = Bid::where('advertisement_id', $advertisement->id)->with('users');
+
 
         return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids'));
     }

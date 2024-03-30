@@ -38,8 +38,6 @@ Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'dele
 // Bid Routes
 Route::post('/advertisement/placebid/{advertisement}', [ShopController::class, 'placeBid'])->name('bids.place');
 Route::get('/my-bids', [ShopController::class, 'index'])->name('bid.show');
-Route::post('/advertisement/bids/{bid}/accept', [ShopController::class, 'accept'])->name('bids.accept');
-Route::delete('/advertisement/bids/{bid}/deny', [ShopController::class, 'denied'])->name('bids.denied');
 Route::delete('/my-bids/{bid}', [ShopController::class, 'delete'])->name('bid.delete');
 
 // Rental Routes

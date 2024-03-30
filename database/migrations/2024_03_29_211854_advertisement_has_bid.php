@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->foreignId('advertisement_id');
             $table->foreignId('bid_id');
             $table->integer('amount');
-            $table->enum('status', ['pending', 'accepted', 'denied'])->default('pending');
             $table->timestamps();
         });
     }
@@ -24,7 +23,7 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('advertisement_has_bid');
     }

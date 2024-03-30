@@ -76,6 +76,10 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ __('Expiration Date') }}
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ __('Action') }}
                             </th>
                             <th scope="col"
@@ -96,7 +100,8 @@
                                 @role('Viewer')
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $advertisement->owner->name }}</td>
                                 @endrole
-                                <td class="px-6 py-4 whitespace-nowrap">{{$advertisement->created_at}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($advertisement->created_at)->format('d/m/Y') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($advertisement->expiration_date)->format('d/m/Y') }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @role(['Private advertiser','Commercial advertiser'])
                                     <a href="{{ route('advertisements.edit', ['advertisement' => $advertisement->id]) }}"

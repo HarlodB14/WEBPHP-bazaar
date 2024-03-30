@@ -61,36 +61,11 @@ class ShopController extends Controller
                     'advertisement_owner' => $advertisement->owner->name,
                     'advertisement_price' => $advertisement->price,
                     'bid_amount' => $bid->amount,
-                    'bid_status' => $bid->status
                 ];
             }
         }
 
         return view('Bid.bid-overview', compact('bidDetails'));
-    }
-
-    public function accept($bidId)
-    {
-        $bid = Bid::findOrFail($bidId);
-
-        $bid->user->bids()->detach($bidId);
-
-        $bid->status = 'accepted';
-        $bid->save();
-
-        return redirect()->route('advertisements.index')->with('success', 'Bid has been successfully accepted!');
-    }
-
-    public function denied($bidId)
-    {
-        $bid = Bid::findOrFail($bidId);
-
-        $bid->user->bids()->detach($bidId);
-
-        $bid->status = 'denied';
-        $bid->save();
-
-        return redirect()->route('advertisements.index')->with('success', 'Bid has been successfully denied.');
     }
 
     public function delete($id)
