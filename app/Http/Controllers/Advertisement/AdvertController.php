@@ -57,11 +57,14 @@ class AdvertController extends Controller
     {
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($advertisement->getURLAttribute());
+        $highestBid = Bid::max('amount');
 
-        $currentBids = Bid::where('advertisement_id', $advertisement->id)->with('users');
+        $currentBids = Bid::where('advertisement_id', $advertisement->id)
+            ->whereHas('users');
 
 
-        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids'));
+
+        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids','highestBid'));
     }
 
 

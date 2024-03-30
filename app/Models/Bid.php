@@ -16,7 +16,7 @@ class Bid extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'advertisement_has_bid', 'bid_id', 'user_id')->withPivot('amount', 'status');
+        return $this->belongsToMany(User::class, 'advertisement_has_bid', 'bid_id', 'user_id')->withPivot('amount');
     }
 
     public function advertisements()

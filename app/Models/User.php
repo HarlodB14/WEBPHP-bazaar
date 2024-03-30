@@ -58,6 +58,6 @@ class User extends Authenticatable
 
     public function bids()
     {
-        return $this->belongsToMany(Bid::class, 'advertisement_has_bid', 'user_id', 'bid_id')->withPivot('amount', 'status');
+        return $this->belongsToMany(Bid::class, 'advertisement_has_bid', 'user_id', 'bid_id')->withPivot('amount');
     }
 }
