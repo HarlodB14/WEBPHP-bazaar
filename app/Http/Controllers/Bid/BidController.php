@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Shop;
+namespace App\Http\Controllers\Bid;
 
 use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
@@ -8,8 +8,10 @@ use App\Models\Bid;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
-class ShopController extends Controller
+class BidController extends Controller
 {
 
     public function placeBid(Request $request, $advertisementId)
@@ -17,6 +19,13 @@ class ShopController extends Controller
         $user = auth()->user();
         $advertisement = Advertisement::findOrFail($advertisementId);
 
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric|gt:0',
+        ]);
+        if ($validator->fails()) {
+            Session::flash('bid_errors', $validator->errors()->all());
+            return redirect()->route('advertisements.show', $advertisementId)->with('error', 'Please fill in a positive number');
+        }
         $userBidCount = $user->bids()->count();
         if ($userBidCount >= 4) {
             return redirect()->route('advertisements.index')

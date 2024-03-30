@@ -4,7 +4,7 @@ use App\Http\Controllers\Advertisement\AdvertController;
 use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Rental\RentalController;
-use App\Http\Controllers\Shop\ShopController;
+use App\Http\Controllers\Bid\BidController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -36,9 +36,9 @@ Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'dele
 
 
 // Bid Routes
-Route::post('/advertisement/placebid/{advertisement}', [ShopController::class, 'placeBid'])->name('bids.place');
-Route::get('/my-bids', [ShopController::class, 'index'])->name('bid.show');
-Route::delete('/my-bids/{bid}', [ShopController::class, 'delete'])->name('bid.delete');
+Route::post('/advertisement/placebid/{advertisement}', [BidController::class, 'placeBid'])->name('bids.place');
+Route::get('/my-bids', [BidController::class, 'index'])->name('bid.show');
+Route::delete('/my-bids/{bid}', [BidController::class, 'delete'])->name('bid.delete');
 
 // Rental Routes
 Route::get('/rentals', [RentalController::class, 'index'])->name('rentals.index');
