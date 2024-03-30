@@ -4,63 +4,114 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
-use App\Models\Basket;
+use App\Models\Bid;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
 {
 
-    public function addItem($advertisementId)
+    public function placeBid(Request $request, $advertisementId)
     {
         $user = auth()->user();
-
-        $basket = $user->basket;
-
-        if (!$basket) {
-            $basket = $user->basket()->create([]);
-            $user->save();
-        } else {
-            if ($basket->advertisements()->where('advertisement_id', $advertisementId)->exists()) {
-                return redirect()->route('advertisements.index')->with('error', "You already have this item in your basket");
-            }
-        }
-
         $advertisement = Advertisement::findOrFail($advertisementId);
 
-        $basket->advertisements()->attach($advertisementId);
+        $userBidCount = $user->bids()->count();
+        if ($userBidCount >= 4) {
+            return redirect()->route('advertisements.index')
+                ->with('error', 'Your maximum amount of bids (4) has been reached');
+        } else {
+            $bid = new Bid();
+            $bid->user_id = $user->id;
+            $bid->advertisement_id = $advertisementId;
 
-        return redirect()->route('advertisements.index')->with('message', 'Advertisement "' . $advertisement->title . '" has been added to your basket!');
+
+            if ($request->has('amount')) {
+                $bid->amount = $request->input('amount');
+            } else {
+                return redirect()->route('advertisements.index')
+                    ->with('error', 'Please provide an amount for your bid.');
+            }
+
+            $bid->save();
+
+
+            $advertisement->bid()->attach($bid->id, ['user_id' => $user->id, 'amount' => $bid->amount]);
+
+            return redirect()->route('advertisements.index')
+                ->with('message', 'Your bid has been placed for ' . $advertisement->title . '!');
+        }
     }
 
 
     public function index()
     {
         $user = auth()->user();
-        $baskets = Basket::where('user_id', $user->id)->with('advertisements')->get();
+        $bids = Bid::where('user_id', $user->id)->with('advertisements.owner')->get();
 
+        $bidDetails = [];
+        foreach ($bids as $bid) {
+            foreach ($bid->advertisements as $advertisement) {
+                $bidDetails[] = [
+                    'bid_id' => $bid->id,
+                    'advertisement_id' => $advertisement->id,
+                    'advertisement_title' => $advertisement->title,
+                    'advertisement_category' => $advertisement->category->type,
+                    'advertisement_owner' => $advertisement->owner->name,
+                    'advertisement_price' => $advertisement->price,
+                    'bid_amount' => $bid->amount,
+                    'bid_status' => $bid->status
+                ];
+            }
+        }
 
-        return view('Basket.basket-overview', compact('baskets'));
+        return view('Bid.bid-overview', compact('bidDetails'));
     }
 
+    public function accept($bidId)
+    {
+        $bid = Bid::findOrFail($bidId);
+
+        $bid->user->bids()->detach($bidId);
+
+        $bid->status = 'accepted';
+        $bid->save();
+
+        return redirect()->route('advertisements.index')->with('success', 'Bid has been successfully accepted!');
+    }
+
+    public function denied($bidId)
+    {
+        $bid = Bid::findOrFail($bidId);
+
+        $bid->user->bids()->detach($bidId);
+
+        $bid->status = 'denied';
+        $bid->save();
+
+        return redirect()->route('advertisements.index')->with('success', 'Bid has been successfully denied.');
+    }
 
     public function delete($id)
     {
-        $basket = Basket::findOrFail($id);
+        $bid = Bid::findOrFail($id);
         $itemName = "";
 
-        if ($basket->advertisements->isNotEmpty()) {
-            foreach ($basket->advertisements as $advertisement) {
+        if ($bid->advertisements->isNotEmpty()) {
+            foreach ($bid->advertisements as $advertisement) {
                 $itemName .= $advertisement->title . ", ";
             }
             $itemName = rtrim($itemName, ", ");
         }
 
-        $basket->delete();
+        $bid->advertisements()->detach();
+
+        $bid->delete();
 
         DB::statement('ALTER TABLE advertisements AUTO_INCREMENT = 1');
 
-        return redirect()->route('basket.show')->with('message', "The item: " . $itemName . " has been deleted from your Cart!");
+        return redirect()->route('bid.show')->with('message', "The bid on item: " . $itemName . " has been revoked!");
     }
 
 

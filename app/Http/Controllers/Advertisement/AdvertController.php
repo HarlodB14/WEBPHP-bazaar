@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Advertisement;
 
 use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
+use App\Models\Bid;
 use App\Models\Category;
-use App\Models\Rental;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,12 +34,12 @@ class AdvertController extends Controller
         return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
     }
 
-    public function agenda()
+    public function agenda(): view
     {
         return view('Advertisement.advertisement-agenda');
     }
 
-    public function fetchAdvertisementData()
+    public function fetchAdvertisementData(): JsonResponse
     {
         $user = auth()->user();
         $advertisementQuery = Advertisement::with('category');
@@ -51,12 +52,15 @@ class AdvertController extends Controller
 
         return response()->json($advertisements);
     }
-    public function show(Advertisement $advertisement)
+
+    public function show(Advertisement $advertisement): view
     {
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($advertisement->getURLAttribute());
 
-        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user'));
+        $currentBids = Bid::where('advertisement_id', $advertisement->id)->with('users')->get();
+
+        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids'));
     }
 
 

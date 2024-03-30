@@ -23,8 +23,8 @@
                         {{ __('Rentals') }}
                     </x-nav-link>
                     @role('Viewer')
-                    <x-nav-link :href="route('basket.show')">
-                        {{ __('My Shopping Cart') }}
+                    <x-nav-link :href="route('bid.show')">
+                        {{ __('My Bids') }}
                     </x-nav-link>
                     @endrole
                 </div>

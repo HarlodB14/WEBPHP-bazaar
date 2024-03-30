@@ -40,6 +40,11 @@ class Advertisement extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function bid()
+    {
+        return $this->belongsToMany(Bid::class, 'advertisement_has_bid');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
