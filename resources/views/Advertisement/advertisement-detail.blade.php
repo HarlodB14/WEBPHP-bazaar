@@ -45,7 +45,31 @@
                         @else
                             <ul class="text-gray-300 w-fit">
                                 @foreach($currentBids as $currentBid)
-                                    <li>{{ $currentBid->user->name }}: €{{ $currentBid->amount }}</li>
+                                    <li>
+                                        @if ($currentBid->users->isNotEmpty())
+                                            @foreach ($currentBid->users as $user)
+                                                {{ $user->name }}: €{{ $currentBid->amount }}
+                                            @endforeach
+                                        @else
+                                            {{ __('Unknown User') }}: €{{ $currentBid->amount }}
+                                        @endif
+                                        @role(['Private advertiser','Commercial advertiser'])
+                                        <form action="{{ route('bids.accept', ['bid' => $currentBid->id]) }}"
+                                              method="POST" class="inline">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="submit"
+                                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-20">{{__('Accept')}}</button>
+                                        </form>
+                                        <form action="{{ route('bids.denied', ['bid' => $currentBid->id]) }}"
+                                              method="POST" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-20">{{__('Deny')}}</button>
+                                        </form>
+                                        @endrole
+                                    </li>
                                 @endforeach
                             </ul>
                         @endif

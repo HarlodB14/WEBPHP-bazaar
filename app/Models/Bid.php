@@ -14,9 +14,9 @@ class Bid extends Model
     protected $table = 'bids';
 
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'advertisement_has_bid', 'bid_id', 'user_id')->withPivot('amount', 'status');
     }
 
     public function advertisements()

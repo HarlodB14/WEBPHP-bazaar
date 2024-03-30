@@ -27,16 +27,19 @@ Route::middleware('auth')->group(function () {
 Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements.index');
 Route::get('/advertisements/create', [AdvertController::class, 'create'])->name('advertisements.create');
 Route::post('/advertisements/store', [AdvertController::class, 'store'])->name('advertisements.store');
+Route::get('/advertisements/agenda', [AdvertController::class, 'agenda'])->name('advertisements.agenda');
+Route::get('/advertisements/fetch', [AdvertController::class, 'fetchAdvertisementData'])->name('advertisements.fetch');
 Route::get('/advertisements/{advertisement}', [AdvertController::class, 'show'])->name('advertisements.show');
 Route::get('/advertisements/{advertisement}/edit', [AdvertController::class, 'edit'])->name('advertisements.edit');
 Route::put('/advertisements/{advertisement}', [AdvertController::class, 'update'])->name('advertisements.update');
 Route::delete('/advertisements/{advertisement}', [AdvertController::class, 'delete'])->name('advertisements.delete');
-Route::get('/advertisements/agenda', [AdvertController::class, 'agenda'])->name('advertisements.agenda');
-Route::get('/advertisements/fetch', [AdvertController::class, 'fetchAdvertisementData'])->name('advertisements.fetch');
+
 
 // Bid Routes
 Route::post('/advertisement/placebid/{advertisement}', [ShopController::class, 'placeBid'])->name('bids.place');
 Route::get('/my-bids', [ShopController::class, 'index'])->name('bid.show');
+Route::post('/advertisement/bids/{bid}/accept', [ShopController::class, 'accept'])->name('bids.accept');
+Route::delete('/advertisement/bids/{bid}/deny', [ShopController::class, 'denied'])->name('bids.denied');
 Route::delete('/my-bids/{bid}', [ShopController::class, 'delete'])->name('bid.delete');
 
 // Rental Routes
