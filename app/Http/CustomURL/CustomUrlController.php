@@ -32,8 +32,11 @@ class CustomUrlController extends Controller
     public function showCustomUrl($customUrl)
     {
 
+        $landingPageData = [
+            'customUrl' => $customUrl,
+        ];
 
-        return view('Home.lading-page');
+        return view('Home.landing-page', $landingPageData);
     }
 
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Rental\RentalController;
 use App\Http\Controllers\Bid\BidController;
 use App\Http\CustomURL\CustomUrlController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -14,7 +15,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    if (Auth::check() && Auth::user()->hasRole('Commercial advertiser') && Auth::user()->customUrl) {
+        return redirect()->route('custom-url.show', ['customUrl' => Auth::user()->customUrl->custom_url]);
+    } else {
+        return view('dashboard');
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Profile Routes
@@ -24,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::middleware(['auth', 'role:commercial advertiser'])->post('/custom-url', [CustomUrlController::class, 'setCustomUrl'])->name('custom-url.set');
-Route::get('/{custormUrl}', [CustomUrlController::class, 'showCustomUrl'])->name('custom-url.show');
+Route::get('/custom/{customUrl}', [CustomUrlController::class, 'showCustomUrl'])->name('custom-url.show');
 
 // Advertisement Routes
 Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements.index');
