@@ -5,6 +5,7 @@ use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Rental\RentalController;
 use App\Http\Controllers\Bid\BidController;
+use App\Http\CustomURL\CustomUrlController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -22,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::post('/custom-url', [CustomUrlController::class, 'setCustomUrl'])->name('custom-url.set');
+Route::get('/{custormUrl}', [CustomUrlController::class, 'showCustomUrl'])->name('custom-url.show');
 
 // Advertisement Routes
 Route::get('/advertisements', [AdvertController::class, 'index'])->name('advertisements.index');
