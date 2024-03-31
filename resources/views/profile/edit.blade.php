@@ -20,17 +20,33 @@
             </div>
             @role('Commercial advertiser')
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Export Registration to PDF') }}
-                        </h2>
-                        <a href="{{ route('export') }}" class="inline-block text-gray-600 dark:text-gray-400 hover:text-white hover:border-b-2 hover:border-white hover:border-solid transition duration-300">
-                            <p class="mt-1 text-sm">
-                                {{ __('Export here your business registration to PDF') }}
-                            </p>
-                        </a>
-                    </div>
+                <div class="max-w-xl">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        {{ __('Export Registration to PDF') }}
+                    </h2>
+                    <a href="{{ route('export') }}"
+                       class="inline-block text-gray-600 dark:text-gray-400 hover:text-white hover:border-b-2 hover:border-white hover:border-solid transition duration-300">
+                        <p class="mt-1 text-sm">
+                            {{ __('Export here your business registration to PDF') }}
+                        </p>
+                    </a>
                 </div>
+            </div>
+            @endrole
+            @role('Commercial advertiser')
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        {{ __('Change landing-page of website') }}
+                    </h2>
+                    <a href="{{ route('dashboard') }}"
+                       class="inline-block text-gray-600 dark:text-gray-400 hover:text-white hover:border-b-2 hover:border-white hover:border-solid transition duration-300">
+                        <p class="mt-1 text-sm">
+                            {{ __('Change the URL of your homepage') }}
+                        </p>
+                    </a>
+                </div>
+            </div>
             @endrole
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">

@@ -12,13 +12,12 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if(Auth::check() && Auth::user()->hasRole('commercial advertiser') && Auth::user()->customUrl)
-                        <!-- Show custom URL link for commercial advertisers with a set URL -->
-                        <x-nav-link :href="route('custom-url.show', ['customUrl' => Auth::user()->customUrl])">
+                    @if(auth()->user()->customUrl)
+                        <x-nav-link :href="route('landing-page', auth()->user()->customUrl->custom_url)"
+                                    :active="request()->routeIs('landing-page')">
                             {{ __('Home') }}
                         </x-nav-link>
                     @else
-                        <!-- Show dashboard link for other users or commercial advertisers without a set URL -->
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Home') }}
                         </x-nav-link>

@@ -11,32 +11,35 @@ class CustomUrlController extends Controller
     public function setCustomUrl(Request $request)
     {
         $request->validate([
-            'custom_url' => ['required', 'unique:custom_urls,custom_url', 'regex:/^[a-zA-Z0-9_\-\/]+$/'],
+            'custom_url' => ['required', 'regex:/^[a-zA-Z0-9_\-\/]+$/'],
         ], [
-            'custom_url.regex' => 'The custom URL must be unique and contain only letters, numbers, underscores, hyphens, and slashes.'
+            'custom_url.regex' => 'The custom URL must contain only letters, numbers, underscores, hyphens, and slashes.'
         ]);
 
         $user = auth()->user();
 
-        if ($user->hasRole('Commercial advertiser')) {
-            $url = $user->customUrl()->create([
+        $customUrl = $user->customUrl;
+
+        if ($customUrl) {
+            $customUrl->update(['custom_url' => $request->input('custom_url')]);
+        } else {
+            $customUrl = $user->customUrl()->create([
                 'custom_url' => $request->input('custom_url')
             ]);
-            $url->update(['custom_url' => $request->input('custom_url')]);
-            return redirect()->to('/' . $request->input('custom_url'));
         }
 
-        return redirect()->route('dashboard')->with('message', 'You do not have permission to set a custom URL.');
+        return redirect()->route('dashboard')->with('message', 'Custom URL updated successfully!');
     }
 
-    public function showCustomUrl($customUrl)
+    public function showCustomUrl()
     {
+        $user = auth()->user();
+        $id = $user->customUrl();
+        if (!$id) {
+            abort(404);
+        }
 
-        $landingPageData = [
-            'customUrl' => $customUrl,
-        ];
-
-        return view('Home.landing-page', $landingPageData);
+        return view('Home.landing-page', ['customUrl' => $id]);
     }
 
 }

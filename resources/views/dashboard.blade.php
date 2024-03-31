@@ -12,12 +12,13 @@
                 role="alert">
                 <span class="block sm:inline">{{ __(session()->get('message')) }}</span>
                 <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                <svg class="fill-current h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                          d="M9.293 10l-1.147 1.146a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-1.5 1.5a1 1 0 0 1-1.414 0L9.293 11.414 7.793 12.914a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l1.5 1.5a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0l-6-6a1 1 0 1 1 1.414-1.414l5.5 5.5a1 1 0 0 1 0 1.414l-2 2a1 1 0 1 1-1.414-1.414l1.146-1.147z"
-                          clip-rule="evenodd"/>
-                </svg>
-            </span>
+                    <svg class="fill-current h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                              d="M9.293 10l-1.147 1.146a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-1.5 1.5a1 1 0 0 1-1.414 0L9.293 11.414 7.793 12.914a1 1 0 0 1-1.414-1.414l2-2a1 1 0 0 1 1.414 0l1.5 1.5a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0l-6-6a1 1 0 1 1 1.414-1.414l5.5 5.5a1 1 0 0 1 0 1.414l-2 2a1 1 0 1 1-1.414-1.414l1.146-1.147z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                </span>
             </div>
         @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -27,7 +28,13 @@
                     @role('Commercial advertiser')
                     <div class="text-black dark:text-gray-100">
                         <p class="w-fit">
-                            set a custom URL for your landing-page here
+                            @if(auth()->user()->customUrl)
+                                See landing-page URL: <a
+                                    href="{{ route('landing-page', auth()->user()->customUrl->id) }}"
+                                    class="text-indigo-600 hover:text-indigo-900">{{ auth()->user()->customUrl->custom_url }}</a>
+                            @else
+                                Set a custom URL for your landing page here
+                            @endif
                         </p>
                         <div class="mt-5"> <!-- Added px-4 class for left padding adjustment -->
                             <form action="{{ route('custom-url.set') }}" method="POST">
@@ -35,8 +42,9 @@
                                 <div class="flex">
                                     <input type="text" name="custom_url" placeholder="Enter Custom URL"
                                            class="text-black border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                    <button type="submit" class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md">Set
-                                        Custom URL
+                                    <button type="submit"
+                                            class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md">Set Custom
+                                        URL
                                     </button>
                                 </div>
                                 @error('custom_url')
@@ -44,8 +52,8 @@
                                 @enderror
                             </form>
                         </div>
-                        @endrole
                     </div>
+                    @endrole
                 </div>
             </div>
         </div>
