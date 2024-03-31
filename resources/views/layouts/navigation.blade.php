@@ -12,16 +12,9 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if(auth()->user()->customUrl)
-                        <x-nav-link :href="route('landing-page', auth()->user()->customUrl->custom_url)"
-                                    :active="request()->routeIs('landing-page')">
-                            {{ __('Home') }}
-                        </x-nav-link>
-                    @else
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Home') }}
-                        </x-nav-link>
-                    @endif
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Home') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('advertisements.index')"
                                 :active="request()->routeIs('advertisements.index')">
                         {{ __('Advertisements') }}
