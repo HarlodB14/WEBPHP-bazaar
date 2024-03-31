@@ -23,22 +23,28 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("Welcome! set a custom URL for your landing-page here.") }}
-
+                    {{ __("Welcome!") }}
+                    @role('Commercial advertiser')
                     <div class="text-black dark:text-gray-100">
+                        <p class="w-fit">
+                            set a custom URL for your landing-page here
+                        </p>
                         <div class="mt-5"> <!-- Added px-4 class for left padding adjustment -->
                             <form action="{{ route('custom-url.set') }}" method="POST">
                                 @csrf
                                 <div class="flex">
                                     <input type="text" name="custom_url" placeholder="Enter Custom URL"
                                            class="text-black border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                    <button type="submit" class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md">Set Custom URL</button>
+                                    <button type="submit" class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md">Set
+                                        Custom URL
+                                    </button>
                                 </div>
                                 @error('custom_url')
                                 <div class="text-red-500 mt-2 ml-2">{{ __($message) }}</div>
                                 @enderror
                             </form>
                         </div>
+                        @endrole
                     </div>
                 </div>
             </div>

@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::post('/custom-url', [CustomUrlController::class, 'setCustomUrl'])->name('custom-url.set');
+Route::middleware(['auth', 'role:commercial advertiser'])->post('/custom-url', [CustomUrlController::class, 'setCustomUrl'])->name('custom-url.set');
 Route::get('/{custormUrl}', [CustomUrlController::class, 'showCustomUrl'])->name('custom-url.show');
 
 // Advertisement Routes
