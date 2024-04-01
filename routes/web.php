@@ -5,7 +5,7 @@ use App\Http\Controllers\Contract\DocumentExportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Rental\RentalController;
 use App\Http\Controllers\Bid\BidController;
-use App\Http\CustomURL\CustomUrlController;
+use App\Http\LandingPage\landingPageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Custom URL Routes
-    Route::post('/custom-url', [CustomUrlController::class, 'setCustomUrl'])->name('custom-url.set');
+    Route::post('/custom-url', [landingPageController::class, 'setCustomUrl'])->name('custom-url.set');
 });
 
 Route::prefix('advertisements')->group(function () {
@@ -61,6 +61,6 @@ Route::prefix('rentals')->group(function () {
 
 Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');
 
-Route::get('/custom/{customerUrl}', [CustomUrlController::class, 'showCustomUrl'])->name('landing-page');
+Route::get('/custom/{customerUrl}', [landingPageController::class, 'showLandingPage'])->name('landing-page');
 
 require __DIR__ . '/auth.php';

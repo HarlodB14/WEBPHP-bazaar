@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\CustomURL;
+namespace App\Http\LandingPage;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomUrl;
 use Illuminate\Http\Request;
 
-class CustomUrlController extends Controller
+class landingPageController extends Controller
 {
     public function setCustomUrl(Request $request)
     {
@@ -31,15 +31,24 @@ class CustomUrlController extends Controller
         return redirect()->route('dashboard')->with('message', 'Custom URL updated successfully!');
     }
 
-    public function showCustomUrl()
+
+    public function showLandingPage()
     {
         $user = auth()->user();
-        $id = $user->customUrl();
-        if (!$id) {
-            abort(404);
-        }
+        $customUrl = $user->customUrl;
 
-        return view('Home.landing-page', ['customUrl' => $id]);
+        if (!$customUrl) {
+            abort(404);
+        } else {
+            $landingPage = $customUrl->landingPage;
+
+            if (!$landingPage) {
+                return view('Home.landingPage');
+            }
+
+            $components = $landingPage->components;
+            return view('Home.landingPage', compact('landingPage', 'components'));
+        }
     }
 
 }

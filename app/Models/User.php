@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(CustomUrl::class);
     }
+
+    public function landingPage()
+    {
+        $this->hasOne(LandingPage::class);
+    }
 }
