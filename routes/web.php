@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Advertisement\AdvertController;
+use App\Http\Controllers\componentController;
 use App\Http\Controllers\Contract\DocumentExportController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Rental\RentalController;
 use App\Http\Controllers\Bid\BidController;
@@ -26,6 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Custom URL Routes
     Route::post('/custom-url', [landingPageController::class, 'setCustomUrl'])->name('custom-url.set');
+    Route::post('/components', [ComponentController::class, 'store'])->name('components.store');
+    Route::get('/landing-page/{landingPageId}', [ComponentController::class, 'show'])->name('landing-page.show');
+});
+Route::controller(ImageController::class)->group(function(){
+    Route::get('/image-upload', 'index')->name('image.form');
+    Route::post('/upload-image', 'storeImage')->name('image.store');
 });
 
 Route::prefix('advertisements')->group(function () {

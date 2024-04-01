@@ -10,11 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('components', function (Blueprint $table) {
+        Schema::create('Types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('landing_page_id');
-            $table->foreignId('type_id');
-            $table->text('content')->nullable();
+            $table->string('type')->unique();
             $table->timestamps();
         });
     }
@@ -24,6 +22,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('components');
+        Schema::dropIfExists('Types');
     }
 };

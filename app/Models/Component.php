@@ -12,7 +12,7 @@ class Component extends Model
     protected $fillable = [
         'landing_page_id',
         'type',
-        'content',
+        'inside_content',
     ];
 
     public function landingPage()

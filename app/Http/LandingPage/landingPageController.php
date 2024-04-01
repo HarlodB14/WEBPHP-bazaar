@@ -4,6 +4,7 @@ namespace App\Http\LandingPage;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomUrl;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class landingPageController extends Controller
@@ -36,6 +37,7 @@ class landingPageController extends Controller
     {
         $user = auth()->user();
         $customUrl = $user->customUrl;
+        $types = Type::all();
 
         if (!$customUrl) {
             abort(404);
@@ -43,11 +45,11 @@ class landingPageController extends Controller
             $landingPage = $customUrl->landingPage;
 
             if (!$landingPage) {
-                return view('Home.landingPage');
+                return view('LandingPage.landingPage-create', compact('types'));
             }
 
             $components = $landingPage->components;
-            return view('Home.landingPage', compact('landingPage', 'components'));
+            return view('LandingPage.landingPage-create', compact('landingPage', 'components'));
         }
     }
 
