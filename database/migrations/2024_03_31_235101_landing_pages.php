@@ -10,15 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('custom_urls', function (Blueprint $table) {
+        Schema::create('landing_pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('landing_page_id')->nullable();
-            $table->string('custom_url')->unique();
             $table->timestamps();
-
         });
-
     }
 
     /**
@@ -26,6 +22,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('custom_urls');
+        Schema::dropIfExists('landing_pages');
     }
 };
