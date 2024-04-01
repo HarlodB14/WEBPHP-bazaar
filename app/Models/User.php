@@ -46,6 +46,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     public function advertisement()
     {
         return $this->hasMany(Advertisement::class);
@@ -59,5 +60,10 @@ class User extends Authenticatable
     public function bids()
     {
         return $this->belongsToMany(Bid::class, 'advertisement_has_bid', 'user_id', 'bid_id')->withPivot('amount');
+    }
+
+    public function customUrl()
+    {
+        return $this->hasOne(CustomUrl::class);
     }
 }
