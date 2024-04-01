@@ -11,13 +11,18 @@ class Component extends Model
 
     protected $fillable = [
         'landing_page_id',
-        'type',
-        'inside_content',
+        'types_id',
+        'content',
     ];
 
     public function landingPage()
     {
         return $this->belongsTo(LandingPage::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'types_id');
     }
 
 }

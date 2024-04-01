@@ -13,8 +13,6 @@ return new class extends Migration {
         Schema::create('landing_pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('type');
-            $table->text('content');
             $table->timestamps();
         });
     }

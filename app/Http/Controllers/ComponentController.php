@@ -4,21 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Component;
 use App\Models\LandingPage;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
-class componentController extends Controller
+class ComponentController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'type' => 'required',
+        $userId = auth()->user()->id;
+
+        $data = $request->validate([
             'content' => 'required',
+            'types_id' => 'exists:types,id',
         ]);
 
-        Component::create([
-            'landing_page_id' => $request->landing_page_id,
-            'type' => $request->type,
-            'content' => $request->inside_content,
+        $landingPage = LandingPage::firstOrCreate([
+            'id' => $request->landing_page_id,
+            'user_id' => $userId
+        ]);
+
+        $landingPage->components()->create([
+            'types_id' => $data['types_id'],
+            'content' => $data['content'],
         ]);
 
         return redirect()->back()->with('message', 'Component added successfully!');
