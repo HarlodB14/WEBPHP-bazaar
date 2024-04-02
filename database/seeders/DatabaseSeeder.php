@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-//        Category::insert([
-//            ['type' => 'Vehicle'],
-//            ['type' => 'Furniture'],
-//            ['type' => 'Animal'],
-//            ['type' => 'Electronics'],
-//            ['type' => 'Home accessories'],
-//            ['type' => 'Other']
-//        ]);
+        Category::insert([
+            ['type' => 'Vehicle'],
+            ['type' => 'Furniture'],
+            ['type' => 'Animal'],
+            ['type' => 'Electronics'],
+            ['type' => 'Home accessories'],
+            ['type' => 'Other']
+        ]);
 
         Type::insert([
             ['type' => 'Featured advertisement'],

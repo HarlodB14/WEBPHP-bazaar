@@ -31,11 +31,5 @@ class ComponentController extends Controller
         return redirect()->back()->with('message', 'Component added successfully!');
     }
 
-    public function show($landingPageId)
-    {
-        $landingPage = LandingPage::findOrFail($landingPageId);
-        $components = $landingPage->components;
 
-        return view('landing-page.show', compact('landingPage', 'components'));
-    }
 }

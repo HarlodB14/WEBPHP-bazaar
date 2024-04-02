@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('components', function (Blueprint $table) {
             $table->id();
             $table->foreignId('landing_page_id');
+            $table->foreignId('advertisements_id')->nullable();
             $table->foreignId('types_id')->nullable();
             $table->text('content')->nullable();
             $table->timestamps();

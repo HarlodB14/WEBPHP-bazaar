@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\LandingPage;
 
 use App\Http\Controllers\Controller;
+use App\Models\Component;
 use App\Models\CustomUrl;
 use App\Models\Type;
 use Illuminate\Http\Request;
@@ -40,25 +41,22 @@ class LandingPageController extends Controller
         $customUrl = $user->customUrl;
 
         if (!$customUrl) {
-            abort(404);
+            return redirect()->to('dashboard');
         }
 
-        $landingPage = $customUrl->landingPage;
+        $landingPage = $user->landingPage;
 
         if (!$landingPage) {
-            // If landing page doesn't exist, redirect to create method
             return Redirect()->route('landing-page.create')->with('message', 'No landing page found. You can create one and add components.');
         }
 
         $components = $landingPage->components;
 
-        if ($components->isEmpty()) {
-            // If landing page has no components, return a message
-            return view('LandingPage.empty', ['message' => 'No components found on this landing page. You can add components <a href="' . route('components.create') . '">here</a>.']);
+        if (!isset($components)) {
+            return view('LandingPage.create', ['message' => 'No components found on this landing page. You can add components Here"']);
         }
 
-        // Return the landing page view with its components
-        return view('LandingPage.landingPage-create', compact('landingPage', 'components'));
+        return view('LandingPage.landingPage-show', compact('landingPage', 'components'));
     }
 
     public function create()

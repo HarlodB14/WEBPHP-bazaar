@@ -8,7 +8,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 w-1/2">
-                <!-- Validation Errors -->
                 @if ($errors->any())
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                         <ul>
@@ -23,11 +22,10 @@
                         {{ session('message') }}
                     </div>
                 @endif
-                <div class="max-w-md bg-gray-800"> <!-- Added max-w-md class -->
+                <div class="max-w-md bg-gray-800">
                     <form method="POST" action="{{ route('components.store') }}">
                         @csrf
 
-                        <!-- Type -->
                         <div class="mt-4">
                             <x-input-label for="types_id" :value="__('Type')"/>
                             <select id="types_id" name="types_id"
@@ -38,14 +36,12 @@
                                 @endforeach
                             </select>
                         </div>
-                        <!-- Content -->
                         <div class="mt-4">
                             <x-input-label for="content" :value="__('Content')"/>
                             <textarea id="content" name="content" rows="4"
                                       class="form-textarea mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                                       style="resize: vertical;">{{ old('content') }}</textarea>
                         </div>
-                        <!-- Image Upload -->
                         <div id="image-upload" class="mt-4 hidden">
                             <x-input-label for="image" :value="__('Image')"/>
                             <input type="file" id="image" name="image"
@@ -57,7 +53,6 @@
                         </div>
                     </form>
 
-                    <!-- Image Upload Form (Displayed only when 'image' type is selected) -->
                     <div id="image-form" class="mt-4 hidden">
                         <h1 class="text-center text-3xl font-semibold mb-8">Image Upload</h1>
                         <form method="POST" action="{{ route('image.store') }}" enctype="multipart/form-data">

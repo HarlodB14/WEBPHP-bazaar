@@ -69,6 +69,6 @@ class User extends Authenticatable
 
     public function landingPage()
     {
-        $this->hasOne(LandingPage::class);
+        return $this->hasOne(LandingPage::class);
     }
 }
