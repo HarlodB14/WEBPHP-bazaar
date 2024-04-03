@@ -18,64 +18,61 @@ class ComponentController extends Controller
         $advertisement = Advertisement::find($advertisementId);
         $content = $advertisement->body;
 
-
-
         $data = $request->validate([
             'types_id' => 'exists:types,id',
             'advertisement_id' => 'required|exists:advertisements,id'
         ]);
-        $data['content'] = $content;
-        $data['advertisement_id'] = $advertisementId;
 
+        $data['content'] = $content;
+        $data['advertisements_id'] = $advertisementId;
+
+        // Find or create the landing page associated with the user
         $landingPage = LandingPage::firstOrCreate([
             'id' => $request->landing_page_id,
             'user_id' => $userId
         ]);
 
-        $component = $landingPage->components()->first();
+        // Find or create the component associated with the landing page and advertisement
+        $component = Component::updateOrCreate(
+            ['landing_page_id' => $landingPage->id, 'advertisements_id' => $advertisementId],
+            $data
+        );
 
-        if ($component) {
-            $component->update([
-                'types_id' => $data['types_id'],
-                'advertisement_id' => $data['advertisement_id'],
-                'content' => $data['content']
-            ]);
-        } else {
-            $component = $landingPage->components()->create([
-                'types_id' => $data['types_id'],
-                'advertisement_id' => $data['advertisement_id'],
-                'content' => $data['content']
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Component added successfully!');
+        return redirect()->back()->with('message', 'Component added or updated successfully!');
     }
+
 
     public function add(Request $request)
     {
         $userId = auth()->user()->id;
-        $advertisementId = $request->input('advertisement_id');
+        $advertisementId = $request->advertisement;
+        $advertisement = Advertisement::findOrFail($advertisementId);
 
+        $landingPage = LandingPage::find(['user_id' => $userId]);
+//        if(!isset($landingPage)){
+//
+//        }
 
-        // Inspect form data
+        // Find the existing component by advertisement ID
+        $existingComponent = Component::where('advertisements_id', $advertisementId)
+            ->first();
 
-        $landingPage = LandingPage::where('user_id', $userId)->first();
-
-
-        if ($landingPage) {
-            $landingPageId = $landingPage->id;
-
-            $component = new Component();
-            $component->advertisements_id = $advertisementId;
-            $component->landing_page_id = $landingPageId;
-            $component->save();
-
-            return redirect()->back()->with('message', 'Advertisement added to your component!');
-        } else {
-            return redirect()->back()->with('error', 'Landing-page could not be found, try again');
+        // If an existing component is found, update it. Otherwise, create a new one.
+        if ($existingComponent) {
+            $existingComponent->update([
+                'types_id' => $request->types_id,
+                'content' => $advertisement->body
+            ]);
+//        } else {
+//            // Create a new component
+//            $component = Component::create([
+//                'advertisements_id' => $advertisementId,
+//                'types_id' => $request->types_id,
+//                'content' => $advertisement->body
+//            ]);
         }
+
+        return redirect()->back()->with('message', 'Advertisement added or updated successfully!');
     }
-
-
 
 }

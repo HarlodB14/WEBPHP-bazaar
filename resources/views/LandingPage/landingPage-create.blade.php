@@ -78,7 +78,7 @@
                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                         @endforeach
                     </select>
-                    <input type="hidden" id="advertisement_id" name="advertisement_id">
+                    <input type="hidden" id="advertisement_id" name="advertisements_id">
                     <button id="add-advertisement-button"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">{{ __("Add Advertisement to Component") }}</button>
                 </form>
