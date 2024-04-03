@@ -11,6 +11,7 @@ class Component extends Model
 
     protected $fillable = [
         'landing_page_id',
+        'advertisements_id',
         'types_id',
         'content',
     ];
@@ -23,6 +24,11 @@ class Component extends Model
     public function type()
     {
         return $this->belongsTo(Type::class, 'types_id');
+    }
+
+    public function advertisements()
+    {
+        return $this->belongsTo(Advertisement::class, 'advertisements_id');
     }
 
 }

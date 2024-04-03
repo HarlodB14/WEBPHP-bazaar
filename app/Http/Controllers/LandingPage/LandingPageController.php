@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\LandingPage;
 
 use App\Http\Controllers\Controller;
+use App\Models\Advertisement;
 use App\Models\Component;
 use App\Models\CustomUrl;
+use App\Models\Rental;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -59,11 +61,29 @@ class LandingPageController extends Controller
         return view('LandingPage.landingPage-show', compact('landingPage', 'components'));
     }
 
+    public function getFeaturedAdvertisements()
+    {
+        $advertisements = Advertisement::with('category')
+            ->where('user_id', auth()->user()->id)
+            ->get();
+
+        $rentals = Rental::with('category')
+            ->where('user_id', auth()->user()->id)
+            ->get();
+
+        $featuredAdvertisements = $advertisements->concat($rentals);
+
+        return $featuredAdvertisements;
+    }
+
+
+
     public function create()
     {
         $types = Type::all();
+        $featuredAdvertisements = $this->getFeaturedAdvertisements();
 
-        return view('LandingPage.landingPage-create', compact('types'));
+        return view('LandingPage.landingPage-create', compact('types', 'featuredAdvertisements'));
     }
 
 }

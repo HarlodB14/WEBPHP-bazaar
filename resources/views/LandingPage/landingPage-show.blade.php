@@ -7,6 +7,10 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <button onclick="window.location='{{ route('landing-page.create') }}'"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-2 rounded focus:outline-none focus:shadow-outline">
+                Add Component
+            </button>
             <div class="g-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="container mx-auto px-4 flex justify-center">
                     @foreach($components as $component)
@@ -28,12 +32,16 @@
                 <div class="max-w-7xl mx-auto px-4 flex justify-center">
                     @foreach($components as $component)
                         @if($component->type === 'featured advertisement')
-                            <div
-                                class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-8">
-
+                            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-8">
+                                <div class="p-6">
+                                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">{{ $component->title }}</h2>
+                                    <p class="text-gray-600 dark:text-gray-400">{{ $component->body }}</p>
+                                    <!-- You can add more fields here if needed -->
+                                </div>
                             </div>
                         @endif
                     @endforeach
+
                 </div>
             </div>
         </div>
