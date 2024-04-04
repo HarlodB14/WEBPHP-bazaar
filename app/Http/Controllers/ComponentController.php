@@ -44,32 +44,16 @@ class ComponentController extends Controller
 
     public function add(Request $request)
     {
-        $userId = auth()->user()->id;
         $advertisementId = $request->advertisement;
         $advertisement = Advertisement::findOrFail($advertisementId);
 
-        $landingPage = LandingPage::find(['user_id' => $userId]);
-//        if(!isset($landingPage)){
-//
-//        }
-
-        // Find the existing component by advertisement ID
         $existingComponent = Component::where('advertisements_id', $advertisementId)
             ->first();
-
-        // If an existing component is found, update it. Otherwise, create a new one.
         if ($existingComponent) {
             $existingComponent->update([
                 'types_id' => $request->types_id,
                 'content' => $advertisement->body
             ]);
-//        } else {
-//            // Create a new component
-//            $component = Component::create([
-//                'advertisements_id' => $advertisementId,
-//                'types_id' => $request->types_id,
-//                'content' => $advertisement->body
-//            ]);
         }
 
         return redirect()->back()->with('message', 'Advertisement added or updated successfully!');

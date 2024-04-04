@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('advertisement_has_bid', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('advertisement_id');
-            $table->foreignId('bid_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('advertisement_id')->constrained();
+            $table->foreignId('bid_id')->constrained();
             $table->integer('amount');
             $table->timestamps();
         });
