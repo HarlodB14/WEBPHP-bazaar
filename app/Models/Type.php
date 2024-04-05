@@ -11,6 +11,8 @@ class Type extends Model
 
     protected $fillable = ['type'];
 
+    protected $Table = ['types'];
+
 
     public function components()
     {
