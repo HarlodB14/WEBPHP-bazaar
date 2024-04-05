@@ -28,7 +28,7 @@ class Component extends Model
 
     public function advertisements()
     {
-        return $this->belongsTo(Advertisement::class, 'advertisements_id');
+        return $this->belongsToMany(Advertisement::class, 'component_has_advertisements', 'component_id', 'advertisements_id');
     }
 
 }

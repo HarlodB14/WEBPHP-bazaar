@@ -52,7 +52,7 @@ class Advertisement extends Model
 
     public function components()
     {
-        return $this->morphMany(Component::class, 'advertisement');
+        return $this->belongsToMany(Component::class, 'advertisement');
     }
     public function linkedAdvertisements()
     {

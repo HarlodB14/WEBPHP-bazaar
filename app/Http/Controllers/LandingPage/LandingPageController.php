@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
 use App\Models\Component;
 use App\Models\CustomUrl;
+use App\Models\LandingPage;
 use App\Models\Rental;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class LandingPageController extends Controller
@@ -40,6 +42,7 @@ class LandingPageController extends Controller
     public function showLandingPage()
     {
         $user = auth()->user();
+        $userId = $user->id;
         $customUrl = $user->customUrl;
 
         if (!$customUrl) {
@@ -49,13 +52,15 @@ class LandingPageController extends Controller
         $landingPage = $user->landingPage;
 
         if (!$landingPage) {
-            return Redirect()->route('landing-page.create')->with('message', 'No landing page found. You can create one and add components.');
+            $landingPage = LandingPage::create([
+                'user_id' => $userId
+            ]);
+            return redirect()->route('landing-page.create')
+                ->with('message', 'No landing page found. You can create one and add components.');
         }
-
-        $components = $landingPage->components;
-
-        if (!isset($components)) {
-            return view('LandingPage.create', ['message' => 'No components found on this landing page. You can add components Here"']);
+        $components = $landingPage->components()->get();
+        if ($components->isEmpty()) {
+            return view('LandingPage.create', ['customUrl' => $customUrl])->with('message', 'No components found on this landing page. You can add components Here');
         }
 
         return view('LandingPage.landingPage-show', compact('landingPage', 'components'));
@@ -77,13 +82,15 @@ class LandingPageController extends Controller
     }
 
 
-
     public function create()
     {
+        $user = auth()->user();
+        $userId = $user->id;
         $types = Type::all();
         $featuredAdvertisements = $this->getFeaturedAdvertisements();
+        $customUrl = CustomUrl::where('user_id', $userId)->first();
 
-        return view('LandingPage.landingPage-create', compact('types', 'featuredAdvertisements'));
+        return view('LandingPage.landingPage-create', compact('types', 'featuredAdvertisements', 'customUrl'));
     }
 
 }

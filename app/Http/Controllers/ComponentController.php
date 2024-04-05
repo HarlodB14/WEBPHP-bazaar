@@ -18,45 +18,31 @@ class ComponentController extends Controller
         $advertisement = Advertisement::find($advertisementId);
         $content = $advertisement->body;
 
-        $data = $request->validate([
-            'types_id' => 'exists:types,id',
-            'advertisement_id' => 'required|exists:advertisements,id'
-        ]);
+        $landingPage = LandingPage::where('user_id', $userId)->firstOrFail();
 
-        $data['content'] = $content;
-        $data['advertisements_id'] = $advertisementId;
-
-        // Find or create the landing page associated with the user
-        $landingPage = LandingPage::firstOrCreate([
-            'id' => $request->landing_page_id,
-            'user_id' => $userId
-        ]);
-
-        // Find or create the component associated with the landing page and advertisement
         $component = Component::updateOrCreate(
-            ['landing_page_id' => $landingPage->id, 'advertisements_id' => $advertisementId],
-            $data
+            ['landing_page_id' => $landingPage->id, 'content' => $content],
         );
-
         return redirect()->back()->with('message', 'Component added or updated successfully!');
     }
 
-
     public function add(Request $request)
     {
+        $userId = auth()->user()->id;
         $advertisementId = $request->advertisement;
+        $landingPage = LandingPage::where('user_id', $userId)->firstOrFail();
         $advertisement = Advertisement::findOrFail($advertisementId);
 
-        $existingComponent = Component::where('advertisements_id', $advertisementId)
-            ->first();
-        if ($existingComponent) {
-            $existingComponent->update([
-                'types_id' => $request->types_id,
-                'content' => $advertisement->body
-            ]);
-        }
+        $component = new Component([
+            'landing_page_id' => $landingPage->id,
+            'types_id' => 1,
+            'content' => $advertisement->body,
+        ]);
 
-        return redirect()->back()->with('message', 'Advertisement added or updated successfully!');
+        $component->save();
+        $component->advertisements()->attach($advertisementId);
+
+        return redirect()->back()->with('message', 'Advertisement added successfully!');
     }
 
 }

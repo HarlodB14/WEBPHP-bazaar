@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');
 
-    Route::get('/custom/{customerUrl}', [LandingPageController::class, 'showLandingPage'])->name('landing-page');
+    Route::get('/custom/{customUrl}', [LandingPageController::class, 'showLandingPage'])->name('landing-page.show');
 });
 
 require __DIR__ . '/auth.php';

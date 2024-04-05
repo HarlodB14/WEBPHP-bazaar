@@ -10,15 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('custom_urls', function (Blueprint $table) {
+        Schema::create('component_has_advertisements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('landing_page_id')->nullable()->constrained();
-            $table->string('custom_url')->unique();
+            $table->foreignId('component_id')->constrained()->onDelete('cascade');
+            $table->foreignId('advertisements_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-
         });
-
     }
 
     /**
@@ -26,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('custom_urls');
+        Schema::dropIfExists('_component_has_advertisement');
     }
 };

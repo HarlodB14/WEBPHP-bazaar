@@ -30,7 +30,7 @@
                         <p class="w-fit">
                             @if(auth()->user()->customUrl)
                                 See landing-page URL: <a
-                                    href="{{ route('landing-page', auth()->user()->customUrl->id) }}"
+                                    href="{{ route('landing-page.show', auth()->user()->customUrl->id) }}"
                                     class="text-indigo-600 hover:text-indigo-900">{{ auth()->user()->customUrl->custom_url }}</a>
                             @else
                                 Set a custom URL for your landing page here
