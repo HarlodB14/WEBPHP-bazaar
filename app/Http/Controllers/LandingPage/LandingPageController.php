@@ -12,6 +12,7 @@ use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
 
 class LandingPageController extends Controller
 {
@@ -24,14 +25,23 @@ class LandingPageController extends Controller
         ]);
 
         $user = auth()->user();
+        $inputCustomUrl = $request->input('custom_url');
 
+        $existingUrl = CustomUrl::where('custom_url', $inputCustomUrl)->first();
+
+        if ($existingUrl && $existingUrl->user_id !== $user->id) {
+            return redirect()->back()->withErrors(['custom_url' => 'The custom URL is already in use. Please choose a different one.']);
+        }
+        $existingRoute = Route::getRoutes()->getByName($inputCustomUrl);
+        if ($existingRoute) {
+            return redirect()->back()->withErrors(['custom_url' => 'The custom URL conflicts with an existing route. Please choose a different one.']);
+        }
         $customUrl = $user->customUrl;
-
         if ($customUrl) {
-            $customUrl->update(['custom_url' => $request->input('custom_url')]);
+            $customUrl->update(['custom_url' => $inputCustomUrl]);
         } else {
             $customUrl = $user->customUrl()->create([
-                'custom_url' => $request->input('custom_url')
+                'custom_url' => $inputCustomUrl
             ]);
         }
 
@@ -43,7 +53,6 @@ class LandingPageController extends Controller
     {
         $user = auth()->user();
         $userId = $user->id;
-        $featuredAdvertisements = $this->getFeaturedAdvertisements();
         $customUrl = $user->customUrl;
 
         if (!$customUrl) {
