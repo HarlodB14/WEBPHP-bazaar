@@ -25,10 +25,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/custom-url', [LandingPageController::class, 'setCustomUrl'])->name('custom-url.set');
-    Route::get('/landig-page/create', [LandingPageController::class, 'create'])->name('landing-page.create');
+    Route::get('/landing-page/create', [LandingPageController::class, 'create'])->name('landing-page.create');
     Route::post('/components', [ComponentController::class, 'store'])->name('components.store');
-    Route::get('/landing-page/{landingPageId}', [ComponentController::class, 'show'])->name('landing-page.show');
-
+    Route::post('/components/add', [ComponentController::class, 'add'])->name('add.advertisement');
     Route::get('/image-upload', [ImageController::class, 'index'])->name('image.form');
     Route::post('/upload-image', [ImageController::class, 'storeImage'])->name('image.store');
 
@@ -62,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/export', [DocumentExportController::class, 'generateContract'])->name('export');
 
-    Route::get('/custom/{customerUrl}', [LandingPageController::class, 'showLandingPage'])->name('landing-page');
+    Route::get('/custom/{customUrl}', [LandingPageController::class, 'showLandingPage'])->name('landing-page.show');
 });
 
 require __DIR__ . '/auth.php';

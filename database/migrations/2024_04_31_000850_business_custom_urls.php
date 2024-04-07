@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('custom_urls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('landing_page_id')->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('landing_page_id')->nullable()->constrained();
             $table->string('custom_url')->unique();
             $table->timestamps();
 

@@ -2,40 +2,75 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertisement;
 use App\Models\Component;
 use App\Models\LandingPage;
+use App\Models\Rental;
 use App\Models\Type;
+use App\Models\TypeEnum;
 use Illuminate\Http\Request;
+use function Termwind\renderUsing;
 
 class ComponentController extends Controller
 {
     public function store(Request $request)
     {
         $userId = auth()->user()->id;
+        $advertisementId = $request->advertisement_id;
+        $inputId = $request->input('types_id');
+        $advertisement = Advertisement::find($advertisementId);
+        $content = $request->input('content');
+        $landingPage = LandingPage::where('user_id', $userId)->firstOrFail();
 
-        $data = $request->validate([
-            'content' => 'required',
-            'types_id' => 'exists:types,id',
-        ]);
+        $component = Component::updateOrCreate(
+            ['landing_page_id' => $landingPage->id, 'types_id' => $inputId, 'content' => $content],
+        );
 
-        $landingPage = LandingPage::firstOrCreate([
-            'id' => $request->landing_page_id,
-            'user_id' => $userId
-        ]);
-
-        $landingPage->components()->create([
-            'types_id' => $data['types_id'],
-            'content' => $data['content'],
-        ]);
-
-        return redirect()->back()->with('message', 'Component added successfully!');
+        return redirect()->back()->with('message', 'Component added or updated successfully!');
     }
 
-    public function show($landingPageId)
+    public function add(Request $request)
     {
-        $landingPage = LandingPage::findOrFail($landingPageId);
-        $components = $landingPage->components;
+        $userId = auth()->user()->id;
+//        $inputTypeId = $request->input('types_id');
+        $advertisementId = $request->advertisement;
+        $landingPage = LandingPage::where('user_id', $userId)->firstOrFail();
+        $advertisement = Advertisement::findOrFail($advertisementId);
+        $contentType = $this->checkContentType($request, $advertisement);
 
-        return view('landing-page.show', compact('landingPage', 'components'));
+        $component = new Component([
+            'landing_page_id' => $landingPage->id,
+            'types_id' => 1,
+            'content' => $contentType
+        ]);
+
+        $component->save();
+        $component->advertisements()->attach($advertisementId);
+
+        return redirect()->back()->with('message', 'Advertisement added successfully!');
     }
+
+
+    public function checkContentType(Request $request, Advertisement $advertisement): string
+    {
+        $inputId = 1;
+        $inputType = Type::where('id', $inputId)->first();
+
+        $content = '';
+        switch ($inputType->type) {
+            case TypeEnum::FeaturedAdvertisement:
+                $content = $advertisement->body;
+                return $content;
+            case TypeEnum::IntroductionText:
+                $content = $request->input('content');
+                return $content;
+            case TypeEnum::Image:
+                // TODO: Handle image content
+                break;
+            default:
+                return 'Failed to load this content type';
+        }
+        return $content;
+    }
+
 }
