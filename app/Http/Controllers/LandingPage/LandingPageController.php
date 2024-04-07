@@ -44,7 +44,6 @@ class LandingPageController extends Controller
         $user = auth()->user();
         $userId = $user->id;
         $featuredAdvertisements = $this->getFeaturedAdvertisements();
-        $types = Type::all();
         $customUrl = $user->customUrl;
 
         if (!$customUrl) {
@@ -62,7 +61,7 @@ class LandingPageController extends Controller
         }
         $components = $landingPage->components()->get();
         if ($components->isEmpty()) {
-            return view('LandingPage.landingPage-create', ['customUrl' => $customUrl, 'types' => $types, 'featuredAdvertisements' => $featuredAdvertisements])->with('message', 'No components found on this landing page. You can add components Here');
+            return view('LandingPage.landingPage-show', ['components' => $components])->with('message', 'No components found on this landing page. You can add components Here');
         }
 
         return view('LandingPage.landingPage-show', compact('landingPage', 'components'));

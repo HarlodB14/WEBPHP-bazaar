@@ -32,7 +32,6 @@
                     <div class="max-w-md bg-gray-800">
                         <form method="POST" action="{{ route('components.store') }}">
                             @csrf
-                            <input type="hidden" id="advertisement_id" name="advertisement_id">
                             <div class="mt-4">
                                 <x-input-label for="types_id" :value="__('Type')"/>
                                 <select id="types_id" name="types_id"
@@ -85,7 +84,7 @@
                                 <option value="{{ $item->id }}">{{ $item->title }}</option>
                             @endforeach
                         </select>
-                        <input type="hidden" id="advertisement_id" name="advertisements_id">
+                        <input type="hidden" id="advertisements_id" name="advertisements_id">
                         <button id="add-advertisement-button"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">{{ __("Add Advertisement to Component") }}</button>
                     </form>

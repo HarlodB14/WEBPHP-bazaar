@@ -9,6 +9,7 @@ use App\Models\Rental;
 use App\Models\Type;
 use App\Models\TypeEnum;
 use Illuminate\Http\Request;
+use function Termwind\renderUsing;
 
 class ComponentController extends Controller
 {
@@ -31,7 +32,7 @@ class ComponentController extends Controller
     public function add(Request $request)
     {
         $userId = auth()->user()->id;
-        $inputTypeId = $request->input('types_id');
+//        $inputTypeId = $request->input('types_id');
         $advertisementId = $request->advertisement;
         $landingPage = LandingPage::where('user_id', $userId)->firstOrFail();
         $advertisement = Advertisement::findOrFail($advertisementId);
@@ -39,7 +40,7 @@ class ComponentController extends Controller
 
         $component = new Component([
             'landing_page_id' => $landingPage->id,
-            'types_id' => $contentType,
+            'types_id' => 1,
             'content' => $contentType
         ]);
 
@@ -49,14 +50,13 @@ class ComponentController extends Controller
         return redirect()->back()->with('message', 'Advertisement added successfully!');
     }
 
-    private function checkContentType(Request $request, Advertisement $advertisement): string
+
+    public function checkContentType(Request $request, Advertisement $advertisement): string
     {
-        $inputId = $request->input('types_id');
+        $inputId = 1;
         $inputType = Type::where('id', $inputId)->first();
 
-
         $content = '';
-        // Determine the content based on the input type
         switch ($inputType->type) {
             case TypeEnum::FeaturedAdvertisement:
                 $content = $advertisement->body;
@@ -66,7 +66,6 @@ class ComponentController extends Controller
                 return $content;
             case TypeEnum::Image:
                 // TODO: Handle image content
-                // For example, you might want to save the image file and return its path
                 break;
             default:
                 return 'Failed to load this content type';

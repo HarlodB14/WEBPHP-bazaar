@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/custom-url', [LandingPageController::class, 'setCustomUrl'])->name('custom-url.set');
-    Route::get('/landig-page/create', [LandingPageController::class, 'create'])->name('landing-page.create');
+    Route::get('/landing-page/create', [LandingPageController::class, 'create'])->name('landing-page.create');
     Route::post('/components', [ComponentController::class, 'store'])->name('components.store');
     Route::post('/components/add', [ComponentController::class, 'add'])->name('add.advertisement');
     Route::get('/image-upload', [ImageController::class, 'index'])->name('image.form');
