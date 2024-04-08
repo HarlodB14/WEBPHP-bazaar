@@ -95,7 +95,7 @@
                         <tbody class="bg-gray-800 divide-y divide-gray-200">
                         @foreach($advertisements as $advertisement)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap"> {{ ($advertisements->currentPage() - 1) * $advertisements->perPage() + $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     {{ $advertisement->title }}
                                 </td>
@@ -137,6 +137,9 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="max-w-71 mx-auto sm:px-6 lg:px-8 mt-2">
+            {{($advertisements->links())}}
         </div>
     </div>
 </x-app-layout>

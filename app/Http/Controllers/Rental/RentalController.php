@@ -22,9 +22,9 @@ class RentalController extends Controller
         $rentalsQuery = Rental::with('category');
 
         if ($user->hasRole(['Viewer'])) {
-            $rentals = $rentalsQuery->get();
+            $rentals = $rentalsQuery->paginate(6);
         } else {
-            $rentals = $user->rental()->with('category')->get();
+            $rentals = $user->rental()->with('category')->paginate(6);
         }
 
         $qrCodes = [];

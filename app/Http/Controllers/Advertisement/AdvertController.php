@@ -25,7 +25,7 @@ class AdvertController extends Controller
         $user_id = auth()->id();
         $user = User::find($user_id);
 
-        $advertisements = Advertisement::with('category')->get();
+        $advertisements = Advertisement::with('category')->paginate(6);
 
         $qrCodes = [];
         foreach ($advertisements as $advertisement) {
