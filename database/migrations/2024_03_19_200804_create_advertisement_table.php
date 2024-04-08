@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('category_id')->constrained();
             $table->string('title');
             $table->string('body');
-            $table->string('image_URL');
+            $table->string('image_URL')->nullable();
             $table->decimal('price', 10, 2);
             $table->timestamps();
         });

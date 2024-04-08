@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('advertisements')->group(function () {
         Route::get('/', [AdvertController::class, 'index'])->name('advertisements.index');
+        Route::get('/featured', [AdvertController::class, 'showFeaturedAdvertisements'])->name('advertisements.featured');
         Route::get('/create', [AdvertController::class, 'create'])->name('advertisements.create');
         Route::post('/store', [AdvertController::class, 'store'])->name('advertisements.store');
         Route::get('/agenda', [AdvertController::class, 'agenda'])->name('advertisements.agenda');

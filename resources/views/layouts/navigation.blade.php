@@ -12,9 +12,17 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    @role('Viewer')
+                    <x-nav-link :href="route('advertisements.featured')"
+                                :active="request()->routeIs('advertisements.featured')">
                         {{ __('Home') }}
                     </x-nav-link>
+                    @endrole
+                    @role('Commercial advertiser')
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                    @endrole
                     <x-nav-link :href="route('advertisements.index')"
                                 :active="request()->routeIs('advertisements.index')">
                         {{ __('Advertisements') }}

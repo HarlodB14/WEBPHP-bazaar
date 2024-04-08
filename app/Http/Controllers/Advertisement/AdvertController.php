@@ -41,6 +41,19 @@ class AdvertController extends Controller
         return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
     }
 
+    public function showFeaturedAdvertisements()
+    {
+        $advertisements = Advertisement::with('category')->paginate(4);
+        $image_urls = [];
+        foreach ($advertisements as $advertisement) {
+            $image_urls[] = asset('images/' . $advertisement->image_URL);
+        }
+
+        return view('advertisement.featured-advertisements', compact('advertisements', 'image_urls'));
+    }
+
+
+
     public function storeUpload(Request $request)
     {
         $request->validate([
