@@ -26,7 +26,8 @@
                     <span class="ml-2 text-gray-300">€{{ __($advertisement->price) }}</span>
                 </div>
                 <div class="mt-4 flex-grow">
-                    <img src="{{ __($advertisement->image_URL) }}" alt="{{ __($advertisement->title) }}" class="w-full">
+                    <img src="{{ $image_url }}" alt="example-image.png"
+                         class="w-full">
                 </div>
                 <div class="mt-10">
                     {!! $qrcode !!}
