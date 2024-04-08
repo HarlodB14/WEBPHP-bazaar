@@ -42,9 +42,8 @@
                                 <div class="flex">
                                     <input type="text" name="custom_url" placeholder="Enter Custom URL"
                                            class="text-black border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                    <button type="submit"
-                                            class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md">Set Custom
-                                        URL
+                                    <button type="submit" class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md">Set
+                                        Custom URL
                                     </button>
                                 </div>
                                 @error('custom_url')

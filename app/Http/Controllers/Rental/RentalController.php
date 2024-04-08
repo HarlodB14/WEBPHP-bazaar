@@ -80,11 +80,16 @@ class RentalController extends Controller
         $data = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required|max:1000',
-            'image_URL' => 'required|string',
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
             'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
         ]);
+
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
+
         $data['user_id'] = $user_id;
         $data['category_id'] = $request->input('category');
+        $data['image_URL'] = $imageName;
 
         Rental::create($data);
         return redirect()->route('rentals.index')->with('message', "New Rental Item created and successfully published!");
@@ -94,8 +99,10 @@ class RentalController extends Controller
     {
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($rental->getURLAttribute());
+        $image_url = asset('images/' . $rental->image_URL);
 
-        return view('Rental.rental-detail', compact('rental', 'qrcode', 'user'));
+
+        return view('Rental.rental-detail', compact('rental', 'qrcode', 'user', 'image_url'));
     }
 
     public function update(Request $request, $id): RedirectResponse

@@ -41,6 +41,19 @@ class AdvertController extends Controller
         return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
     }
 
+    public function showFeaturedAdvertisements()
+    {
+        $advertisements = Advertisement::with('category')->paginate(4);
+        $image_urls = [];
+        foreach ($advertisements as $advertisement) {
+            $image_urls[] = asset('images/' . $advertisement->image_URL);
+        }
+
+        return view('advertisement.featured-advertisements', compact('advertisements', 'image_urls'));
+    }
+
+
+
     public function storeUpload(Request $request)
     {
         $request->validate([
@@ -159,12 +172,14 @@ class AdvertController extends Controller
         $user = auth()->user();
         $qrcode = QrCode::size(150)->generate($advertisement->getURLAttribute());
         $highestBid = Bid::max('amount');
+        $image_url = asset('images/' . $advertisement->image_URL);
+
 
         $currentBids = Bid::where('advertisement_id', $advertisement->id)
-            ->whereHas('users');
+            ->whereHas('users')
+            ->get();
 
-
-        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids', 'highestBid'));
+        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids', 'highestBid', 'image_url'));
     }
 
 
@@ -192,12 +207,12 @@ class AdvertController extends Controller
             'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
         ]);
 
-        $image = $request->file('image');
-        $imageName = time() . '.' . $image->extension();
-        $image->move(public_path('images'), $imageName);
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
 
         $data['user_id'] = $user_id;
         $data['category_id'] = $request->input('category');
+        $data['image_URL'] = $imageName;
 
         Advertisement::create($data);
         return redirect()->route('advertisements.index')->with('message', "New advertisement created and successfully published!");
@@ -210,12 +225,13 @@ class AdvertController extends Controller
         $data = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required|max:1000',
-            'image_URL' => 'required|string',
+            'image' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
         ]);
-
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
         $data['category_id'] = $request->input('category');
-
+        $data['image_URL'] = $imageName;
         $advertisement->update($data);
 
         return redirect()->route('advertisements.index')->with('message', "Advertisement updated!");
