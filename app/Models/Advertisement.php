@@ -63,4 +63,17 @@ class Advertisement extends Model
     {
         return $this->belongsToMany(Rental::class, 'advertisement_links', 'advertisement_id', 'linked_advertisement_id');
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        if ($filters['query'] ?? false) {
+            $query->where('title', 'like', '%' . $filters['query'] . '%')
+                ->orWhere('body', 'like', '%' . $filters['query'] . '%')
+                ->orWhereHas('category', function ($query) use ($filters) {
+                    $query->where('type', 'like', '%' . $filters['query'] . '%');
+                })
+                ->orWhere('price', 'like', '%' . $filters['query'] . '%');
+        }
+    }
+
 }

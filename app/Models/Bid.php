@@ -35,4 +35,12 @@ class Bid extends Model
         ]);
 
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        if ($filters['query'] ?? false) {
+            $query->where('amount', 'like', '%' . $filters['query'] . '%');
+
+        }
+    }
 }
