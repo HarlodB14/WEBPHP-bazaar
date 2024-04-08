@@ -7,10 +7,13 @@ use App\Models\Advertisement;
 use App\Models\Bid;
 use App\Models\Category;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -32,6 +35,100 @@ class AdvertController extends Controller
 
 
         return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
+    }
+
+    public function storeUpload(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        $file = $request->file('csv_file');
+        $fileName = $file->getClientOriginalName();
+        try {
+            $file->move(public_path('csv-files'), $fileName);
+
+            $filePath = public_path('csv-files') . '\\' . $fileName;
+            $this->importCsv($filePath);
+
+            return redirect()->route('advertisements.index')->with('message', 'Advertisements uploaded successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error uploading advertisements: ' . $e->getMessage());
+        }
+    }
+
+
+    public function importCsv($filePath)
+    {
+        $advertisementsArray = $this->csvToArray($filePath);
+        $userId = auth()->user()->id;
+
+        foreach ($advertisementsArray as $advertisementData) {
+            //BOM characters weghalen
+            $advertisementData = array_map(function ($key, $value) {
+                $key = trim(preg_replace('/\x{FEFF}/u', '', $key));
+                return [$key => $value];
+            }, array_keys($advertisementData), $advertisementData);
+
+
+            $advertisementData = array_reduce($advertisementData, 'array_merge', []);
+
+            $categoryName = $advertisementData['Category'];
+            $title = $advertisementData['Title'] ?? null;
+            $body = $advertisementData['Body'] ?? '';
+            $imageUrl = $advertisementData['Image URL'] ?? '';
+            $price = $advertisementData['Price'] ?? null;
+
+            $category = Category::where('type', $categoryName)->first();
+
+            if (!$category) {
+                $category = Category::create(['type' => $categoryName]);
+            }
+
+            $advertisementData['category_id'] = $category->id;
+            unset($advertisementData['Category']);
+
+            $advertisementData['user_id'] = $userId;
+
+            Advertisement::create(array_merge($advertisementData, ['title' => $title, 'body' => $body, 'image_URL' => $imageUrl, 'price' => $price]));
+        }
+
+        return redirect()->route('advertisements.index')->with('message', 'Advertisements uploaded successfully.');
+    }
+
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        if (!file_exists($filename) || !is_readable($filename)) {
+            return false;
+        }
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+
+                if (!$header) {
+                    $header = $row;
+                } else {
+                    if (count($row) !== count($header)) {
+                        continue;
+                    }
+                    $rowData = array_combine($header, $row);
+                    $rowData = array_map('trim', $rowData);
+                    $data[] = $rowData;
+                }
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
+
+    public function upload(): view
+    {
+        return view('advertisement.advertisement-upload');
     }
 
     public function agenda(): view
@@ -63,8 +160,7 @@ class AdvertController extends Controller
             ->whereHas('users');
 
 
-
-        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids','highestBid'));
+        return view('advertisement.advertisement-detail', compact('advertisement', 'qrcode', 'user', 'currentBids', 'highestBid'));
     }
 
 
