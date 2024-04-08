@@ -20,19 +20,23 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class AdvertController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $user_id = auth()->id();
         $user = User::find($user_id);
 
-        $advertisements = Advertisement::with('category')->get();
-
+        $searchQuery = $request->input('query');
+        $advertisementsQuery = Advertisement::with('category');
+        if ($searchQuery) {
+            $advertisementsQuery->filter(['query' => $searchQuery]);
+        }
+        $advertisements = $advertisementsQuery->paginate(6);
+        // Generate QR codes for each advertisement
         $qrCodes = [];
         foreach ($advertisements as $advertisement) {
             $url = $advertisement->getURLAttribute();
             $qrCodes[$advertisement->id] = QrCode::size(150)->generate($url);
         }
-
 
         return view('advertisement.advertisement-overview', compact('advertisements', 'qrCodes', 'user'));
     }
@@ -184,9 +188,14 @@ class AdvertController extends Controller
         $data = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required|max:1000',
-            'image_URL' => 'required|string',
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
             'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
         ]);
+
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->extension();
+        $image->move(public_path('images'), $imageName);
+
         $data['user_id'] = $user_id;
         $data['category_id'] = $request->input('category');
 

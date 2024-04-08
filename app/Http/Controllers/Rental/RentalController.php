@@ -16,15 +16,20 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RentalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         $rentalsQuery = Rental::with('category');
 
+        $searchQuery = $request->input('query');
+        if ($searchQuery) {
+            $rentalsQuery->filter(['query' => $searchQuery]);
+        }
+
         if ($user->hasRole(['Viewer'])) {
-            $rentals = $rentalsQuery->get();
+            $rentals = $rentalsQuery->paginate(6);
         } else {
-            $rentals = $user->rental()->with('category')->get();
+            $rentals = $user->rental()->with('category')->paginate(6);
         }
 
         $qrCodes = [];

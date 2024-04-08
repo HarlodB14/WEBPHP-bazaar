@@ -6,6 +6,17 @@
     </x-slot>
 
     <div class="py-12">
+        <div class="max-w-71 mx-auto sm:px-6 lg:px-8 flex justify-end mb-4 ml-8 w-1/4">
+            <form action="{{ route('rentals.index') }}" method="GET" class="flex w-full">
+                <x-text-input
+                    class="flex-grow border-gray-800 rounded-l-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    placeholder="Search rentals..." name="query"/>
+                <button type="submit"
+                        class="inline-flex items-center rounded-r-md bg-blue-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 ml-2">
+                    {{ __('Search') }}
+                </button>
+            </form>
+        </div>
         @if(session()->has('message'))
             <div
                 class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-xl mx-auto mb-4"
@@ -93,7 +104,7 @@
                         <tbody class="bg-gray-800 divide-y divide-gray-200">
                         @foreach($rentals as $rental)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ ($rentals->currentPage() - 1) * $rentals->perPage() + $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     {{ $rental->title }}
                                 </td>
@@ -134,6 +145,9 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="max-w-71 mx-auto sm:px-6 lg:px-8 mt-2">
+            {{($rentals->links())}}
         </div>
     </div>
 </x-app-layout>

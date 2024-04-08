@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('advertisement_has_bid', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('advertisement_id')->constrained();
-            $table->foreignId('bid_id')->constrained();
+            $table->foreignId('advertisement_id')->constrained()->onDelete('cascade');;
+            $table->foreignId('bid_id')->constrained()->onDelete('cascade');;
             $table->integer('amount');
             $table->timestamps();
         });

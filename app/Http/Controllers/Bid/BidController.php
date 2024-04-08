@@ -54,10 +54,16 @@ class BidController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
-        $bids = Bid::where('user_id', $user->id)->with('advertisements.owner')->get();
+        $searchQuery = $request->input('query');
+        $bidsQuery = Bid::where('user_id', $user->id)->with('advertisements.owner');
+
+        if ($searchQuery) {
+            $bidsQuery->filter(['query' => $searchQuery]);
+        }
+        $bids = $bidsQuery->get();
 
         $bidDetails = [];
         foreach ($bids as $bid) {
