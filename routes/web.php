@@ -37,13 +37,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/store', [AdvertController::class, 'store'])->name('advertisements.store');
         Route::get('/agenda', [AdvertController::class, 'agenda'])->name('advertisements.agenda');
         Route::get('/fetch', [AdvertController::class, 'fetchAdvertisementData'])->name('advertisements.fetch');
+        Route::get('/upload', [AdvertController::class, 'upload'])->name('advertisements.upload');
+        Route::post('/store-upload', [AdvertController::class, 'storeUpload'])->name('advertisements.store.upload');
+        Route::post('/placebid/{advertisement}', [BidController::class, 'placeBid'])->name('bids.place');
+        Route::get('/my-bids', [BidController::class, 'index'])->name('bid.show');
+        Route::delete('/my-bids/{bid}', [BidController::class, 'delete'])->name('bid.delete');
+
         Route::get('/{advertisement}', [AdvertController::class, 'show'])->name('advertisements.show');
         Route::get('/{advertisement}/edit', [AdvertController::class, 'edit'])->name('advertisements.edit');
         Route::put('/{advertisement}', [AdvertController::class, 'update'])->name('advertisements.update');
         Route::delete('/{advertisement}', [AdvertController::class, 'delete'])->name('advertisements.delete');
-        Route::post('/placebid/{advertisement}', [BidController::class, 'placeBid'])->name('bids.place');
-        Route::get('/my-bids', [BidController::class, 'index'])->name('bid.show');
-        Route::delete('/my-bids/{bid}', [BidController::class, 'delete'])->name('bid.delete');
     });
 
     Route::prefix('rentals')->group(function () {
